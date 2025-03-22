@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "/",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.2.0",
@@ -24,7 +24,10 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "react-hooks/exhaustive-deps": "off"
+    }
   },
   "browserslist": {
     "production": [
@@ -39,9 +42,12 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.16",
-    "gh-pages": "^6.1.0",
-    "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.5"
+    "autoprefixer": "^10.4.14",
+    "gh-pages": "^5.0.0",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
