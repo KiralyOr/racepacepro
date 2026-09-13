@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/racepacepro/static/css/main.03fc097c.css",
-    "main.js": "/racepacepro/static/js/main.459bdd48.js",
-    "index.html": "/racepacepro/index.html",
-    "main.03fc097c.css.map": "/racepacepro/static/css/main.03fc097c.css.map",
-    "main.459bdd48.js.map": "/racepacepro/static/js/main.459bdd48.js.map"
+    "main.css": "./static/css/main.ce3f01cb.css",
+    "main.js": "./static/js/main.66488615.js",
+    "index.html": "./index.html",
+    "main.ce3f01cb.css.map": "./static/css/main.ce3f01cb.css.map",
+    "main.66488615.js.map": "./static/js/main.66488615.js.map"
   },
   "entrypoints": [
-    "static/css/main.03fc097c.css",
-    "static/js/main.459bdd48.js"
+    "static/css/main.ce3f01cb.css",
+    "static/js/main.66488615.js"
   ]
 }
