@@ -12,6 +12,7 @@ import { ZONE_STYLES } from './zoneStyles';
 import { ARTICLES } from './articles';
 import PaceCurve from './PaceCurve';
 import TrainingStart from './TrainingStart';
+import { MARATHONS } from './marathons';
 
 // Keep these questions in sync with the FAQPage JSON-LD in public/index.html.
 // Structured data has to match what's actually on the page.
@@ -149,6 +150,25 @@ const SiteContent = ({ highlightPacePerKm }) => (
         and the date you need to begin, and tells you plainly when there is not enough time.
       </p>
       <TrainingStart />
+    </section>
+
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <h2 className="text-base font-semibold text-slate-900">Pacing specific marathons</h2>
+      <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        What each course does to your splits. Berlin and Valencia let you hold one pace, Boston
+        punishes you for it, and New York asks for uneven splits by design.
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {MARATHONS.map((race) => (
+          <a
+            key={race.id}
+            href={`/marathons/${race.id}/`}
+            className="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+          >
+            {race.name}
+          </a>
+        ))}
+      </div>
     </section>
 
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">

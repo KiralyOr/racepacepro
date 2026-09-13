@@ -27,7 +27,8 @@ Alongside the React app, the build emits ~34 standalone HTML pages under `build/
 - `src/pageData.js` defines the page set and derives every figure from `paceMath`, so pages cannot drift from the calculator. It lives in `src/` so the normal test runner covers it.
 - `scripts/generate-pages.js` renders them. It loads `src/pageData.js` through `@babel/core` at build time rather than duplicating the maths in CommonJS.
 - Generated pages are static content and link into the app via the query-string state in `src/urlState.js` (`/?d=marathon&m=time&t=12600`), so the calculator opens on the right target.
-- All internal links use a constant `../../` prefix, not absolute paths: every generated page sits two levels deep, and absolute paths break wherever the site is served from a subpath.
+- All internal links are relative, not absolute, because absolute paths break wherever the site is served from a subpath. The prefix is computed per page by `relFor(slug)`, since depth varies: `pace/<slug>/` and `guides/<slug>/` are two levels down, `marathons/` is one.
+- `src/marathons.js` holds one entry per race, rendered at `marathons/<id>/` with an index at `marathons/`. These are pacing and course guides. **They deliberately carry no dates, ballot windows or entry deadlines**, because this project cannot verify them and a wrong deadline published as fact is the worst failure the site could have. `month` is stated because these races sit in the same month every year; a specific date is not. Tests in `src/marathons.test.js` fail the build if a year or calendar date appears in the prose.
 - `sitemap.xml` is written by the generator and is no longer a file in `public/`.
 
 ## Deployment
