@@ -51,6 +51,7 @@ const { PREDICTOR_PAGE, predictorTables } = loadModule(path.join(ROOT, 'src/pred
 const { NAV, sectionFor } = loadModule(path.join(ROOT, 'src/navigation.js'));
 const { hubContentFor } = loadModule(path.join(ROOT, 'src/hubContent.js'));
 const { themeForIndex } = loadModule(path.join(ROOT, 'src/raceTheme.js'));
+const { FOOTER_LINES } = loadModule(path.join(ROOT, 'src/siteFooter.js'));
 
 // Relative rather than absolute so pages work wherever the site is served
 // from, including a subpath such as the GitHub Pages copy. The depth varies:
@@ -164,6 +165,8 @@ li{margin-bottom:7px}
 .swatch{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:8px;vertical-align:baseline}
 footer{border-top:1px solid #e2e8f0;background:#fff;margin-top:32px}
 footer .in{max-width:42rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
+footer .foot{margin:0;font-size:13px;color:#64748b}
+footer .foot + .foot{margin-top:8px;font-size:12px;color:#94a3b8}
 `;
 
 const MENU_ICON =
@@ -245,7 +248,7 @@ ${analyticsHtml()}
     .join(' › ')}</nav>
 ${body}
 </main>
-<footer><div class="in">Race Pace Pro is a free running pace calculator. Calculations run entirely in your browser.</div></footer>
+<footer><div class="in">${FOOTER_LINES.map((line) => `<p class="foot">${esc(line)}</p>`).join('')}</div></footer>
 </body>
 </html>
 `;
