@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { GOALS, LEVELS, addWeeks, fallbackGoal, formatDate, planFor } from './trainingPlan';
+import { Field, selectClass } from './formControls';
 
 // Parsed and formatted by hand rather than through Date's string parsing:
 // new Date('2026-12-06') is treated as UTC midnight, which lands on the
@@ -19,16 +20,6 @@ const startOfToday = () => {
   const now = new Date();
   return new Date(now.getFullYear(), now.getMonth(), now.getDate());
 };
-
-const Field = ({ label, children }) => (
-  <label className="flex flex-col gap-1">
-    <span className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</span>
-    {children}
-  </label>
-);
-
-const selectClass =
-  'w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100';
 
 const VERDICT = {
   comfortable: {

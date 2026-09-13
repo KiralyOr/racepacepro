@@ -1,6 +1,8 @@
 import {
   KM_PER_MILE,
   POPULAR_DISTANCES_KM,
+  RIEGEL_CONSERVATIVE,
+  RIEGEL_STANDARD,
   buildSplits,
   convertPace,
   formatClock,
@@ -8,6 +10,8 @@ import {
   joinTime,
   kmToUnit,
   paceFromTotalTime,
+  predictAll,
+  predictTime,
   splitPace,
   splitTime,
   totalTimeFromPace,
@@ -167,5 +171,48 @@ describe('switching units preserves the finish time', () => {
     );
 
     expect(inMiles).toBeCloseTo(inKm, 6);
+  });
+});
+
+describe('race time prediction', () => {
+  // The worked example in guides/marathon-goal-time. If this drifts, the guide
+  // and the tool are telling a reader two different things.
+  test('reproduces the worked example from the goal time guide', () => {
+    const half = joinTime({ hours: 1, minutes: 45, seconds: 0 });
+    const predicted = predictTime(half, POPULAR_DISTANCES_KM['Half Marathon'], POPULAR_DISTANCES_KM.Marathon);
+    expect(formatClock(Math.round(predicted))).toBe('3:38:55');
+  });
+
+  test('predicting the distance you ran returns the time you ran', () => {
+    const time = joinTime({ hours: 0, minutes: 22, seconds: 30 });
+    expect(predictTime(time, 5, 5)).toBeCloseTo(time, 6);
+  });
+
+  test('a longer target is always slower per kilometre', () => {
+    const time = joinTime({ hours: 0, minutes: 20, seconds: 0 });
+    const rows = predictAll(time, 5);
+    const paces = rows.map((r) => r.pacePerKm);
+    paces.slice(1).forEach((pace, i) => expect(pace).toBeGreaterThan(paces[i]));
+  });
+
+  test('the conservative exponent predicts a slower marathon than the standard one', () => {
+    const half = joinTime({ hours: 1, minutes: 30, seconds: 0 });
+    const km = POPULAR_DISTANCES_KM['Half Marathon'];
+    const marathon = POPULAR_DISTANCES_KM.Marathon;
+    expect(predictTime(half, km, marathon, RIEGEL_CONSERVATIVE)).toBeGreaterThan(
+      predictTime(half, km, marathon, RIEGEL_STANDARD)
+    );
+  });
+
+  test('marks the row the prediction came from', () => {
+    const rows = predictAll(1200, 5);
+    expect(rows.filter((r) => r.isSource).map((r) => r.name)).toEqual(['5K']);
+  });
+
+  test('rejects nonsense input rather than returning a number', () => {
+    expect(predictTime(0, 5, 10)).toBeNull();
+    expect(predictTime(1200, 0, 10)).toBeNull();
+    expect(predictTime(1200, 5, -1)).toBeNull();
+    expect(predictTime(NaN, 5, 10)).toBeNull();
   });
 });

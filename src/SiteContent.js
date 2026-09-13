@@ -11,6 +11,7 @@ import {
 import { ZONE_STYLES } from './zoneStyles';
 import PaceCurve from './PaceCurve';
 import TrainingStart from './TrainingStart';
+import RacePredictor from './RacePredictor';
 
 const REFERENCE_PACES_PER_KM = [210, 240, 270, 300, 330, 360, 390, 420, 450, 480];
 
@@ -92,6 +93,15 @@ const ConversionTable = ({ highlightPacePerKm }) => {
 
 const SiteContent = ({ highlightPacePerKm }) => (
   <div className="mt-8 space-y-4">
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <h2 className="text-base font-semibold text-slate-900">Predict your race time</h2>
+      <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        Enter a recent race result and see what it suggests at every other distance. This uses the
+        Riegel formula, the same method explained in the goal time guide below.
+      </p>
+      <RacePredictor />
+    </section>
+
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <h2 className="text-base font-semibold text-slate-900">When to start training</h2>
       <p className="mt-2 text-sm leading-relaxed text-slate-600">

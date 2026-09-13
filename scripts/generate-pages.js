@@ -44,6 +44,8 @@ const { RACES, SITE_ORIGIN, allPages, hubPage } = loadModule(path.join(ROOT, 'sr
 const { ARTICLES } = loadModule(path.join(ROOT, 'src/articles.js'));
 const { MARATHONS } = loadModule(path.join(ROOT, 'src/marathons.js'));
 const { ABOUT, FAQ } = loadModule(path.join(ROOT, 'src/homeContent.js'));
+const { analyticsHtml } = loadModule(path.join(ROOT, 'src/analytics.js'));
+const { PREDICTOR_PAGE, predictorTables } = loadModule(path.join(ROOT, 'src/predictorData.js'));
 
 // Relative rather than absolute so pages work wherever the site is served
 // from, including a subpath such as the GitHub Pages copy. The depth varies:
@@ -148,6 +150,7 @@ const layout = ({ slug, title, description, crumbs, body, extraSchema }) => {
 <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
 ${extraSchema ? `<script type="application/ld+json">${JSON.stringify(extraSchema)}</script>` : ''}
 <style>${STYLES}</style>
+${analyticsHtml()}
 </head>
 <body>
 <div class="bar"><div class="in"><a href="${REL}">${LOGO}<b>Race Pace Pro</b></a></div></div>
@@ -268,6 +271,12 @@ Pick a target for its full split table.</p>
       .map((r) => `<a href="${REL}pace/${r.id}/">${esc(r.name)}</a>`)
       .join('')}
   </div>
+</div>
+
+<div class="card">
+  <h2>Not sure which goal is realistic?</h2>
+  <p>Predict your ${esc(page.race.name.toLowerCase())} time from a race you have already run.</p>
+  <p><a class="cta" href="${REL}predictor/">Open the race time predictor</a></p>
 </div>`;
 
 const articleBody = (article, REL) => `
@@ -352,6 +361,64 @@ const marathonBody = (race, REL) => `
   </div>
 </div>`;
 
+const predictorBody = (REL) => `
+<h1>Race time predictor</h1>
+<p class="lede">What a result at one distance suggests you can run at another. Every figure below
+comes from the Riegel formula, the same calculation the interactive predictor uses.</p>
+
+<div class="card">
+  <h2>How the prediction works</h2>
+  <p>Riegel's formula scales a known result by the ratio of the two distances, raised to a power:</p>
+  <p><strong>predicted time = known time x (new distance / known distance) ^ 1.06</strong></p>
+  <p>The exponent is the whole idea. At 1.0 you would hold the same pace forever, which nobody
+  does. At 1.06 the formula models the slowing down that comes with distance. Some coaches use
+  1.07 or 1.08 for the marathon specifically, which is more conservative and often more accurate
+  for anyone who has not built marathon specific endurance.</p>
+  <p>The tables below use 1.06. Treat them as an upper bound on what your current fitness allows,
+  not a target to train toward.</p>
+</div>
+
+${predictorTables()
+  .map(
+    (table) => `<div class="card">
+  <h2>If you have run a ${esc(table.source)}</h2>
+  <table>
+    <thead><tr><th>${esc(table.source)} time</th>${table.targets
+      .map((t) => `<th class="r">${esc(t)}</th>`)
+      .join('')}</tr></thead>
+    <tbody>
+      ${table.rows
+        .map(
+          (row) => `<tr>
+        <td>${formatClock(row.seconds)}</td>
+        ${row.predictions.map((p) => `<td class="r">${formatClock(Math.round(p))}</td>`).join('')}
+      </tr>`
+        )
+        .join('')}
+    </tbody>
+  </table>
+</div>`
+  )
+  .join('')}
+
+<div class="card">
+  <h2>Where predictions go wrong</h2>
+  <p>Riegel assumes you are equally well trained for both distances. Almost nobody is. The formula
+  is at its most reliable between neighbouring distances, and at its least reliable predicting a
+  marathon from a 5K, where it quietly assumes an endurance base that a fast 5K says nothing
+  about.</p>
+  <p>It also assumes even effort on a flat course in good conditions. Heat, hills and a congested
+  start all cost time no formula accounts for.</p>
+  <p><a class="cta" href="${REL}guides/marathon-goal-time/">Read the full guide to setting a goal time</a></p>
+</div>
+
+<div class="card">
+  <h2>Turn a prediction into a pacing plan</h2>
+  <p>Once you have a target, the calculator gives you the pace it needs and the split times to run
+  it.</p>
+  <p><a class="cta" href="${REL}">Open the calculator</a></p>
+</div>`;
+
 const marathonIndexBody = (REL) => `
 <h1>Marathon pacing guides</h1>
 <p class="lede">What each course does to your splits, and how to plan for it. Dates and entry are
@@ -423,6 +490,13 @@ const homeStaticHtml = () => `
   </section>
 
   <section class="${CARD}">
+    <h2 class="${H2}">Race time predictor</h2>
+    <p class="${PARA}">What a result at one distance suggests you can run at another, for every
+    common finishing time. Riegel formula tables for 5K, 10K, half marathon and marathon.</p>
+    <p class="mt-3 text-sm"><a href="predictor/" class="font-medium text-blue-700 hover:underline">Open the race time predictor</a></p>
+  </section>
+
+  <section class="${CARD}">
     <h2 class="${H2}">Race pace charts</h2>
     <p class="${PARA}">Every common goal time for each distance, with the pace it demands and a
     full split table.</p>
@@ -481,14 +555,20 @@ const injectHomeContent = () => {
   });
 
   html = html.replace(ROOT_DIV, ROOT_DIV + homeStaticHtml());
-  html = html.replace(HEAD_END, faqSchemaHtml() + HEAD_END);
+  html = html.replace(HEAD_END, faqSchemaHtml() + analyticsHtml() + HEAD_END);
   fs.writeFileSync(file, html);
 };
+
+// Counted here rather than recomputed at the end. The old total was hand
+// written arithmetic over the page sources, so it silently went stale every
+// time a page was added from somewhere new.
+let written = 0;
 
 const write = (slug, html) => {
   const dir = path.join(BUILD, slug);
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), html);
+  written += 1;
 };
 
 const main = () => {
@@ -543,6 +623,17 @@ const main = () => {
   });
 
   write(
+    PREDICTOR_PAGE.slug,
+    layout({
+      slug: PREDICTOR_PAGE.slug,
+      title: PREDICTOR_PAGE.title,
+      description: PREDICTOR_PAGE.description,
+      crumbs: [{ name: 'Home', href: '/' }, { name: 'Race time predictor', href: '/predictor/' }],
+      body: predictorBody(relFor(PREDICTOR_PAGE.slug)),
+    })
+  );
+
+  write(
     'marathons',
     layout({
       slug: 'marathons',
@@ -579,6 +670,7 @@ const main = () => {
     '',
     ...pages.map((p) => `${p.slug}/`),
     ...ARTICLES.map((a) => `${a.slug}/`),
+    `${PREDICTOR_PAGE.slug}/`,
     'marathons/',
     ...MARATHONS.map((race) => `marathons/${race.id}/`),
   ];
@@ -598,7 +690,7 @@ ${urls
 `
   );
 
-  console.log(`generate-pages: wrote ${pages.length + ARTICLES.length + MARATHONS.length + 1} pages and a sitemap with ${urls.length} URLs`);
+  console.log(`generate-pages: wrote ${written} pages and a sitemap with ${urls.length} URLs`);
 };
 
 main();
