@@ -42,3 +42,49 @@ export const totalTimeFromPace = (paceSecondsPerUnit, distanceInUnit) =>
 
 export const paceFromTotalTime = (totalSeconds, distanceInUnit) =>
   distanceInUnit > 0 ? totalSeconds / distanceInUnit : 0;
+
+export const SPLIT_STRATEGIES = [
+  { id: 'even', label: 'Even', fraction: 0 },
+  { id: 'neg1', label: 'Negative 1%', fraction: 0.01 },
+  { id: 'neg2', label: 'Negative 2%', fraction: 0.02 },
+];
+
+// Cap the row count so an absurd custom distance can't generate a table
+// long enough to lock up the page.
+const MAX_SPLIT_ROWS = 60;
+
+// Cumulative elapsed time at each split marker. A negative split runs the
+// second half `fraction` faster than the first, holding total time constant:
+//   T = half*p1 + half*p1*(1 - fraction)  =>  p1 = T / (half * (2 - fraction))
+export const buildSplits = (distanceInUnit, totalSeconds, fraction = 0) => {
+  if (!Number.isFinite(distanceInUnit) || distanceInUnit <= 0) return [];
+  if (!Number.isFinite(totalSeconds) || totalSeconds <= 0) return [];
+
+  const half = distanceInUnit / 2;
+  const firstPace = totalSeconds / (half * (2 - fraction));
+  const secondPace = firstPace * (1 - fraction);
+  const elapsedAt = (d) =>
+    d <= half ? d * firstPace : half * firstPace + (d - half) * secondPace;
+
+  const step = Math.max(1, Math.ceil(distanceInUnit / MAX_SPLIT_ROWS));
+  const markers = [];
+  for (let d = step; d < distanceInUnit; d += step) markers.push(d);
+  markers.push(distanceInUnit);
+
+  return markers.map((distance) => ({
+    distance,
+    seconds: elapsedAt(distance),
+    isFinish: distance === distanceInUnit,
+  }));
+};
+
+export const formatClock = (totalSeconds) => {
+  const { hours, minutes, seconds } = splitTime(totalSeconds);
+  const pad = (n) => String(n).padStart(2, '0');
+  return hours > 0 ? `${hours}:${pad(minutes)}:${pad(seconds)}` : `${minutes}:${pad(seconds)}`;
+};
+
+export const formatPace = (paceSeconds) => {
+  const { minutes, seconds } = splitPace(paceSeconds);
+  return `${minutes}:${String(seconds).padStart(2, '0')}`;
+};
