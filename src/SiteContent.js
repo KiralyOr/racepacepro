@@ -10,6 +10,7 @@ import {
 } from './paceMath';
 import { ZONE_STYLES } from './zoneStyles';
 import { ARTICLES } from './articles';
+import PaceCurve from './PaceCurve';
 
 // Keep these questions in sync with the FAQPage JSON-LD in public/index.html.
 // Structured data has to match what's actually on the page.
@@ -168,6 +169,17 @@ const SiteContent = ({ highlightPacePerKm }) => (
         from a recent race result or a threshold test.
       </p>
       <ConversionTable highlightPacePerKm={highlightPacePerKm} />
+    </section>
+
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <h2 className="text-base font-semibold text-slate-900">What pace drift costs you</h2>
+      <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        The same slip in pace costs very little over 5K and a great deal over a marathon. Running
+        5 seconds per kilometre slower than planned loses you 25 seconds in a 5K and about three
+        and a half minutes in a marathon, which is why pacing discipline matters more the longer
+        the race.
+      </p>
+      <PaceCurve />
     </section>
 
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
