@@ -1,4 +1,4 @@
-import { SPLIT_STRATEGIES, unitToKm } from './paceMath';
+import { clampNegativeSplitPct, unitToKm } from './paceMath';
 
 const STORAGE_KEY = 'racepacepro:last';
 
@@ -24,7 +24,7 @@ export const DEFAULT_STATE = {
   mode: 'timeFromPace',
   paceSeconds: 300,
   totalSeconds: 1500,
-  strategy: 'even',
+  negativeSplitPct: 0,
 };
 
 const clamp = (raw, min, max, fallback) => {
@@ -46,7 +46,7 @@ export const encodeState = (state) => {
     params.set('m', 'time');
     params.set('t', String(Math.round(state.totalSeconds)));
   }
-  if (state.strategy !== 'even') params.set('s', state.strategy);
+  if (state.negativeSplitPct > 0) params.set('s', String(state.negativeSplitPct));
   return params.toString();
 };
 
@@ -71,8 +71,6 @@ export const decodeState = (search) => {
     }
   }
 
-  const strategyId = params.get('s');
-
   return {
     selectedKey,
     customValue,
@@ -81,7 +79,7 @@ export const decodeState = (search) => {
     mode: params.get('m') === 'time' ? 'paceFromTime' : 'timeFromPace',
     paceSeconds: clamp(params.get('p'), 1, 86400, DEFAULT_STATE.paceSeconds),
     totalSeconds: clamp(params.get('t'), 1, 86400, DEFAULT_STATE.totalSeconds),
-    strategy: SPLIT_STRATEGIES.some((s) => s.id === strategyId) ? strategyId : 'even',
+    negativeSplitPct: clampNegativeSplitPct(params.get('s')),
   };
 };
 

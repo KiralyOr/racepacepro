@@ -23,7 +23,7 @@ export const RACES = [
 ];
 
 // Goal times people actually search for, per distance. Deliberately a modest
-// set of meaningfully different targets rather than every permutation — a wall
+// set of meaningfully different targets rather than every permutation. A wall
 // of near-identical pages is a ranking liability, not an asset.
 export const GOAL_SECONDS = {
   '5k': [900, 1080, 1200, 1320, 1500, 1800, 2100],
@@ -32,7 +32,7 @@ export const GOAL_SECONDS = {
   marathon: [9900, 10800, 11700, 12600, 13500, 14400, 16200, 18000],
 };
 
-// "20" under an hour, "3:30" at or over one — matching how the goal is spoken
+// "20" under an hour, "3:30" at or over one, matching how the goal is spoken
 // and searched ("sub 20 5k", "sub 3:30 marathon").
 export const goalLabel = (seconds) => {
   const hours = Math.floor(seconds / 3600);
@@ -78,7 +78,7 @@ export const hubPage = (race) => ({
   slug: `pace/${race.id}`,
   race,
   goals: GOAL_SECONDS[race.id].map((seconds) => goalPage(race, seconds)),
-  title: `${race.name} Pace Chart — Times, Splits and Paces`,
+  title: `${race.name} Pace Chart: Times, Splits and Paces`,
   description:
     `${race.name} pace chart: the pace needed for every common goal time, in minutes per ` +
     `kilometre and per mile, with full split tables.`,

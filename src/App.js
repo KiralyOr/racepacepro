@@ -30,7 +30,7 @@ const App = () => {
         Running Pace Calculator
       </h1>
       <p className="mt-2 mb-6 text-sm leading-relaxed text-slate-600">
-        Work out your finish time from a target pace, or the pace you need to hit a goal time — for
+        Work out your finish time from a target pace, or the pace you need to hit a goal time. Works for
         5K, 10K, half marathon, marathon or any distance you choose, in kilometres or miles.
       </p>
 
@@ -40,7 +40,7 @@ const App = () => {
 
     <footer className="border-t border-slate-200 bg-white">
       <div className="mx-auto max-w-2xl px-4 py-6 text-sm text-slate-500">
-        Race Pace Pro — a free running pace calculator. Calculations run entirely in your browser.
+        Race Pace Pro is a free running pace calculator. Calculations run entirely in your browser.
       </div>
     </footer>
   </div>

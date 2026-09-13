@@ -2,7 +2,7 @@
 // Renders the static SEO pages into build/ after Create React App has run.
 //
 // The point of these pages is that a crawler sees real content, so they are
-// written as plain HTML rather than mounted by React — the app itself is
+// written as plain HTML rather than mounted by React. The app itself is
 // client-rendered and would serve an empty div. Page maths comes from the same
 // src/paceMath.js the app uses, loaded here through Babel so there is no second
 // implementation to drift.
@@ -41,6 +41,7 @@ const loadModule = (request) => {
 
 const { formatClock, formatPace } = loadModule(path.join(ROOT, 'src/paceMath.js'));
 const { RACES, SITE_ORIGIN, allPages, hubPage } = loadModule(path.join(ROOT, 'src/pageData.js'));
+const { ARTICLES } = loadModule(path.join(ROOT, 'src/articles.js'));
 
 // Every generated page sits at pace/<slug>/index.html, so one relative prefix
 // reaches the site root from all of them. Absolute paths would break wherever
@@ -89,6 +90,9 @@ tr.fin td{color:#1d4ed8;font-weight:650}
 .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .links a{font-size:14px;text-decoration:none;border:1px solid #e2e8f0;background:#fff;
  border-radius:999px;padding:6px 14px;color:#334155}
+.lede{font-size:17px;color:#334155;margin-bottom:18px}
+ul{margin:0 0 12px;padding-left:20px;color:#475569;font-size:15px}
+li{margin-bottom:7px}
 footer{border-top:1px solid #e2e8f0;background:#fff;margin-top:32px}
 footer .in{max-width:44rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
 `;
@@ -103,7 +107,7 @@ const ZONE_COLOUR = {
   recovery: ['#f1f5f9', '#475569'],
 };
 
-const layout = ({ slug, title, description, crumbs, body }) => {
+const layout = ({ slug, title, description, crumbs, body, extraSchema }) => {
   const url = `${SITE_ORIGIN}/${slug}/`;
   const breadcrumb = {
     '@context': 'https://schema.org',
@@ -139,6 +143,7 @@ const layout = ({ slug, title, description, crumbs, body }) => {
 <meta name="twitter:description" content="${esc(description)}">
 <meta name="twitter:image" content="${SITE_ORIGIN}/og-image.png">
 <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
+${extraSchema ? `<script type="application/ld+json">${JSON.stringify(extraSchema)}</script>` : ''}
 <style>${STYLES}</style>
 </head>
 <body>
@@ -149,7 +154,7 @@ const layout = ({ slug, title, description, crumbs, body }) => {
     .join(' › ')}</nav>
 ${body}
 </main>
-<footer><div class="in">Race Pace Pro — a free running pace calculator. Calculations run entirely in your browser.</div></footer>
+<footer><div class="in">Race Pace Pro is a free running pace calculator. Calculations run entirely in your browser.</div></footer>
 </body>
 </html>
 `;
@@ -173,8 +178,8 @@ const goalBody = (page, siblings) => {
 <h1>${esc(page.heading)}</h1>
 <p>To finish a ${esc(page.race.name.toLowerCase())} in under ${esc(page.label)}${
     page.totalSeconds < 3600 ? ' minutes' : ''
-  }, you need to average <strong>${formatPace(page.perKm)} per kilometre</strong> —
-that is ${formatPace(page.perMile)} per mile — for the full ${page.race.km} km.</p>
+  }, you need to average <strong>${formatPace(page.perKm)} per kilometre</strong>,
+or ${formatPace(page.perMile)} per mile, for the full ${page.race.km} km.</p>
 
 <div class="hero">
   <div class="k">Required pace</div>
@@ -195,7 +200,7 @@ that is ${formatPace(page.perMile)} per mile — for the full ${page.race.km} km
 <div class="card">
   <h2>Pacing it in practice</h2>
   <p>These splits assume even effort on a flat course. Most personal bests are actually run
-  slightly negative — a touch slower than target for the first half, then faster once you know
+  slightly negative. That means a touch slower than target for the first half, then faster once you know
   the effort is sustainable. Going out fast and hanging on is the most common way to miss a
   time goal.</p>
   <p>Open this target in the calculator to adjust it, switch units, or model a negative split.</p>
@@ -247,11 +252,41 @@ Pick a target for its full split table.</p>
 </div>
 
 <div class="card">
+  <h2>Guides</h2>
+  <div class="links">
+    ${ARTICLES.map((a) => `<a href="${REL}${a.slug}/">${esc(a.title)}</a>`).join('')}
+  </div>
+</div>
+
+<div class="card">
   <h2>Other distances</h2>
   <div class="links">
     ${RACES.filter((r) => r.id !== page.race.id)
       .map((r) => `<a href="${REL}pace/${r.id}/">${esc(r.name)}</a>`)
       .join('')}
+  </div>
+</div>`;
+
+const articleBody = (article) => `
+<h1>${esc(article.heading)}</h1>
+<p class="lede">${esc(article.intro)}</p>
+${article.sections
+  .map(
+    (section) => `<div class="card"><h2>${esc(section.heading)}</h2>${section.blocks
+      .map((block) =>
+        typeof block === 'string'
+          ? `<p>${esc(block)}</p>`
+          : `<ul>${block.list.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>`
+      )
+      .join('')}</div>`
+  )
+  .join('')}
+<div class="card">
+  <h2>Put a number on it</h2>
+  <p>Work out the pace any target demands, with split times you can carry into the race.</p>
+  <p><a class="cta" href="${REL}">Open the calculator</a></p>
+  <div class="links" style="margin-top:14px">
+    ${RACES.map((r) => `<a href="${REL}pace/${r.id}/">${esc(r.name)} paces</a>`).join('')}
   </div>
 </div>`;
 
@@ -263,7 +298,7 @@ const write = (slug, html) => {
 
 const main = () => {
   if (!fs.existsSync(BUILD)) {
-    console.error('generate-pages: build/ not found — run the CRA build first.');
+    console.error('generate-pages: build/ not found. Run the CRA build first.');
     process.exit(1);
   }
 
@@ -288,7 +323,30 @@ const main = () => {
     write(page.slug, layout({ ...page, crumbs, body }));
   });
 
-  const urls = ['', ...pages.map((p) => `${p.slug}/`)];
+  ARTICLES.forEach((article) => {
+    write(
+      article.slug,
+      layout({
+        ...article,
+        crumbs: [
+          { name: 'Home', href: '/' },
+          { name: article.title, href: `/${article.slug}/` },
+        ],
+        body: articleBody(article),
+        extraSchema: {
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: article.title,
+          description: article.description,
+          mainEntityOfPage: `${SITE_ORIGIN}/${article.slug}/`,
+          author: { '@type': 'Organization', name: 'Race Pace Pro' },
+          publisher: { '@type': 'Organization', name: 'Race Pace Pro' },
+        },
+      })
+    );
+  });
+
+  const urls = ['', ...pages.map((p) => `${p.slug}/`), ...ARTICLES.map((a) => `${a.slug}/`)];
   fs.writeFileSync(
     path.join(BUILD, 'sitemap.xml'),
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -305,7 +363,7 @@ ${urls
 `
   );
 
-  console.log(`generate-pages: wrote ${pages.length} pages and a sitemap with ${urls.length} URLs`);
+  console.log(`generate-pages: wrote ${pages.length + ARTICLES.length} pages and a sitemap with ${urls.length} URLs`);
 };
 
 main();

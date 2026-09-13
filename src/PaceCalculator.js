@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   POPULAR_DISTANCES_KM,
-  SPLIT_STRATEGIES,
+  clampNegativeSplitPct,
   buildSplits,
   convertPace,
   formatClock,
@@ -10,6 +10,7 @@ import {
   kmToUnit,
   paceFromTotalTime,
   splitPace,
+  negativeSplitOptions,
   splitTime,
   totalTimeFromPace,
   unitToKm,
@@ -110,7 +111,7 @@ const TimeSelect = ({ label, value, options, onChange, pad }) => (
 const PaceCalculator = ({ onPacePerKmChange }) => {
   const [state, setState] = useState(initialState);
   const [copied, setCopied] = useState(false);
-  const { selectedKey, customValue, customKm, unit, mode, paceSeconds, totalSeconds, strategy } =
+  const { selectedKey, customValue, customKm, unit, mode, paceSeconds, totalSeconds, negativeSplitPct } =
     state;
 
   const patch = (fields) => setState((current) => ({ ...current, ...fields }));
@@ -169,13 +170,13 @@ const PaceCalculator = ({ onPacePerKmChange }) => {
       await navigator.clipboard.writeText(shareUrl(encodeState(state)));
       setCopied(true);
     } catch {
-      // Clipboard unavailable (insecure context or denied) — the URL bar still has it.
+      // Clipboard unavailable (insecure context or denied). The URL bar still has it.
     }
   };
 
   const pace = splitPace(paceSeconds);
   const time = splitTime(totalSeconds);
-  const fraction = SPLIT_STRATEGIES.find((s) => s.id === strategy)?.fraction ?? 0;
+  const fraction = negativeSplitPct / 100;
   const splits = buildSplits(distanceInUnit, totalSeconds, fraction);
   const showingTime = mode === 'timeFromPace';
   const zone = zoneForPace(paceSeconds, unit);
@@ -371,14 +372,14 @@ const PaceCalculator = ({ onPacePerKmChange }) => {
             <label className="flex items-center gap-2 text-sm text-slate-600">
               <span>Strategy</span>
               <select
-                value={strategy}
-                onChange={(e) => patch({ strategy: e.target.value })}
+                value={negativeSplitPct}
+                onChange={(e) => patch({ negativeSplitPct: clampNegativeSplitPct(e.target.value) })}
                 aria-label="Split strategy"
                 className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm outline-none focus:border-blue-500"
               >
-                {SPLIT_STRATEGIES.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
+                {negativeSplitOptions().map((pct) => (
+                  <option key={pct} value={pct}>
+                    {pct === 0 ? 'Even' : `${pct}% negative`}
                   </option>
                 ))}
               </select>
@@ -407,7 +408,7 @@ const PaceCalculator = ({ onPacePerKmChange }) => {
                           <td colSpan={2} className="pt-2 pb-1">
                             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
                               <span className="h-px flex-1 bg-emerald-200" />
-                              Halfway · second half {Math.round(fraction * 100)}% quicker
+                              Halfway · second half {negativeSplitPct}% quicker
                               <span className="h-px flex-1 bg-emerald-200" />
                             </div>
                           </td>

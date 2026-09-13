@@ -90,3 +90,52 @@ describe('hubs link their goals', () => {
     expect([...paces].sort((a, b) => a - b)).toEqual(paces);
   });
 });
+
+describe('guides', () => {
+  const { ARTICLES } = require('./articles');
+
+  test('every article has a unique slug under guides/', () => {
+    const slugs = ARTICLES.map((a) => a.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+    slugs.forEach((slug) => expect(slug).toMatch(/^guides\/[a-z0-9-]+$/));
+  });
+
+  test('every article has real content, not a stub', () => {
+    ARTICLES.forEach((article) => {
+      expect(article.sections.length).toBeGreaterThanOrEqual(5);
+      const words = article.sections
+        .flatMap((s) => s.blocks)
+        .flatMap((b) => (typeof b === 'string' ? [b] : b.list))
+        .join(' ')
+        .split(/\s+/).length;
+      expect(words).toBeGreaterThan(500);
+    });
+  });
+
+  test('titles and descriptions are unique and search-result sized', () => {
+    expect(new Set(ARTICLES.map((a) => a.title)).size).toBe(ARTICLES.length);
+    ARTICLES.forEach((article) => {
+      expect(article.description.length).toBeGreaterThan(70);
+      expect(article.description.length).toBeLessThan(200);
+    });
+  });
+});
+
+describe('house style', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const dir = path.join(__dirname, '..');
+  const files = [
+    'src/articles.js', 'src/pageData.js', 'src/SiteContent.js', 'src/App.js',
+    'src/paceMath.js', 'src/urlState.js', 'src/PaceCalculator.js', 'src/zoneStyles.js',
+    'scripts/generate-pages.js', 'public/index.html', 'public/manifest.json',
+    'CLAUDE.md', 'docs/operations.md', 'README.md',
+  ];
+
+  // Em and en dashes read as machine-written prose; the project deliberately
+  // uses ordinary punctuation instead.
+  test.each(files)('%s uses no em or en dashes', (file) => {
+    const contents = fs.readFileSync(path.join(dir, file), 'utf8');
+    expect(contents).not.toMatch(/[—–]/);
+  });
+});
