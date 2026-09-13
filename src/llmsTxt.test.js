@@ -83,3 +83,36 @@ describe('llms.txt against the page set', () => {
     expect([...links].sort()).toEqual([...sitemapUrls].sort());
   });
 });
+
+// The bug this suite missed the first time. Link text was derived by splitting
+// the page title on a colon, which quietly truncated every goal time
+// containing one: eighteen entries shipped reading "Sub-1", "Sub-2", "Sub-3",
+// each pointing somewhere different. Descriptions were fine, links were
+// unique, so nothing failed. Titles are what an agent reads first.
+describe('link text', () => {
+  const titles = [...text.matchAll(/^- \[([^\]]+)\]/gm)].map((m) => m[1]);
+
+  test('every link has distinct text', () => {
+    const seen = new Map();
+    titles.forEach((t) => seen.set(t, (seen.get(t) || 0) + 1));
+    expect([...seen].filter(([, n]) => n > 1)).toEqual([]);
+  });
+
+  test('there is one title per link', () => {
+    expect(titles.length).toBe(links.length);
+  });
+
+  test('no goal time is truncated at its colon', () => {
+    allPages()
+      .filter((p) => p.type === 'goal')
+      .forEach((page) => {
+        const line = text.split('\n').find((l) => l.includes(`(${SITE_ORIGIN}/${page.slug}/)`));
+        const title = line.slice(3, line.indexOf(']'));
+        // "Sub-3:30 Marathon pace" must survive whole, not become "Sub-3".
+        expect({ slug: page.slug, keepsLabel: title.includes(page.label) }).toEqual({
+          slug: page.slug,
+          keepsLabel: true,
+        });
+      });
+  });
+});
