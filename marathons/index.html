@@ -37,6 +37,45 @@ a{color:#1d4ed8}
 .nav a:hover{color:#0f172a}
 .nav a[aria-current]{color:#1d4ed8}
 .bar .brand{gap:10px}
+/* Mobile menu.
+   A <details> element is used purely as a no-JavaScript state holder: the nav
+   is its SIBLING, not its child, so the toggle is a plain [open] ~ .nav rule
+   rather than a fight with how each browser hides details content. The
+   generated pages ship no JavaScript at all and this keeps it that way. */
+.menu { display: none; }
+.menu > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  margin: -6px;
+  border-radius: 8px;
+  color: #334155;
+}
+.menu > summary::-webkit-details-marker { display: none; }
+.menu > summary:hover { background: #f1f5f9; }
+.menu > summary:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.menu .close { display: none; }
+.menu[open] .close { display: block; }
+.menu[open] .bars { display: none; }
+
+@media (max-width: 639px) {
+  .menu { display: block; margin-left: auto; }
+  .nav { display: none; }
+  /* flex-basis forces the panel onto its own line inside the wrapping header. */
+  .menu[open] ~ .nav {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    gap: 0;
+    margin-left: 0;
+    padding-top: 6px;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 8px;
+  }
+  .menu[open] ~ .nav a { padding: 9px 0; }
+}
 .bar svg{width:26px;height:26px}
 .bar b{font-size:16px;letter-spacing:-.01em}
 .bar a{color:#0f172a;text-decoration:none;display:flex;align-items:center;gap:10px}
@@ -82,6 +121,7 @@ footer .in{max-width:42rem;margin:0 auto;padding:20px 16px;font-size:13px;color:
 <body>
 <div class="bar"><div class="in">
 <a class="brand" href="../"><svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#2563eb"/><rect x="234" y="116" width="44" height="52" rx="12" fill="#fff"/><circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40"/><path d="M256 302 L330 228" fill="none" stroke="#fff" stroke-width="36" stroke-linecap="round"/></svg><b>Race Pace Pro</b></a>
+<details class="menu"><summary aria-label="Menu"><svg class="bars" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="close" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></summary></details>
 <nav class="nav" aria-label="Site"><a href="../">Calculator</a><a href="../pace/">Pace charts</a><a href="../predictor/">Predictor</a><a href="../marathons/" aria-current="page">Marathons</a><a href="../guides/">Guides</a></nav>
 </div></div>
 <main>
