@@ -46,6 +46,26 @@ describe('site navigation', () => {
     expect(labels).toEqual(NAV.map((i) => i.label));
   });
 
+  // The mobile menu is a <details> element used as a no-JavaScript state
+  // holder, with the nav as its SIBLING rather than its child. That sibling
+  // relationship is the whole mechanism: nest the nav inside and the CSS
+  // toggle stops working. Behaviour at each width is checked in the browser;
+  // this guards the structure the CSS depends on.
+  test('the shell puts the nav after the details toggle, not inside it', () => {
+    const shell = fs.readFileSync(path.join(__dirname, '..', 'public', 'index.html'), 'utf8');
+    const details = shell.indexOf('<details class="menu">');
+    const detailsEnd = shell.indexOf('</details>', details);
+    const nav = shell.indexOf('<nav', details);
+    expect(details).toBeGreaterThan(-1);
+    expect(nav).toBeGreaterThan(detailsEnd);
+    expect(shell.slice(details, detailsEnd)).not.toContain('<nav');
+  });
+
+  test('the toggle has an accessible name', () => {
+    const shell = fs.readFileSync(path.join(__dirname, '..', 'public', 'index.html'), 'utf8');
+    expect(shell).toMatch(/<summary[^>]*aria-label="Menu"/);
+  });
+
   test('marks the section a page belongs to', () => {
     expect(sectionFor('marathons/berlin')).toBe('marathons/');
     expect(sectionFor('pace/sub-3-30-marathon')).toBe('pace/');

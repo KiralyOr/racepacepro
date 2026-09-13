@@ -15,3 +15,47 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Mirrors the menu rules in scripts/generate-pages.js STYLES. The home page
+   is the React shell and loads this stylesheet; generated pages carry their
+   own inline copy. Behaviour is checked in the browser at both widths rather
+   than by comparing the two strings. */
+/* Mobile menu.
+   A <details> element is used purely as a no-JavaScript state holder: the nav
+   is its SIBLING, not its child, so the toggle is a plain [open] ~ .nav rule
+   rather than a fight with how each browser hides details content. The
+   generated pages ship no JavaScript at all and this keeps it that way. */
+.menu { display: none; }
+.menu > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  margin: -6px;
+  border-radius: 8px;
+  color: #334155;
+}
+.menu > summary::-webkit-details-marker { display: none; }
+.menu > summary:hover { background: #f1f5f9; }
+.menu > summary:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.menu .close { display: none; }
+.menu[open] .close { display: block; }
+.menu[open] .bars { display: none; }
+
+@media (max-width: 639px) {
+  .menu { display: block; margin-left: auto; }
+  .nav { display: none; }
+  /* flex-basis forces the panel onto its own line inside the wrapping header. */
+  .menu[open] ~ .nav {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    gap: 0;
+    margin-left: 0;
+    padding-top: 6px;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 8px;
+  }
+  .menu[open] ~ .nav a { padding: 9px 0; }
+}
