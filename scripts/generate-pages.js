@@ -52,6 +52,7 @@ const { NAV, sectionFor } = loadModule(path.join(ROOT, 'src/navigation.js'));
 const { hubContentFor } = loadModule(path.join(ROOT, 'src/hubContent.js'));
 const { themeForIndex } = loadModule(path.join(ROOT, 'src/raceTheme.js'));
 const { FOOTER_LINES } = loadModule(path.join(ROOT, 'src/siteFooter.js'));
+const { buildLlmsTxt } = loadModule(path.join(ROOT, 'src/llmsTxt.js'));
 
 // Relative rather than absolute so pages work wherever the site is served
 // from, including a subpath such as the GitHub Pages copy. The depth varies:
@@ -918,6 +919,8 @@ const main = () => {
     'marathons/',
     ...MARATHONS.map((race) => `marathons/${race.id}/`),
   ];
+  fs.writeFileSync(path.join(BUILD, 'llms.txt'), buildLlmsTxt());
+
   fs.writeFileSync(
     path.join(BUILD, 'sitemap.xml'),
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -934,7 +937,9 @@ ${urls
 `
   );
 
-  console.log(`generate-pages: wrote ${written} pages and a sitemap with ${urls.length} URLs`);
+  console.log(
+    `generate-pages: wrote ${written} pages, a sitemap with ${urls.length} URLs, and llms.txt`
+  );
 };
 
 main();
