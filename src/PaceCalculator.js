@@ -25,6 +25,34 @@ const formatDistance = (value) =>
 
 const trimNumber = (value) => String(Math.round(value * 100) / 100);
 
+const Icon = ({ children }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className="h-4 w-4"
+  >
+    {children}
+  </svg>
+);
+
+const LinkIcon = () => (
+  <Icon>
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+  </Icon>
+);
+
+const CheckIcon = () => (
+  <Icon>
+    <path d="M20 6 9 17l-5-5" />
+  </Icon>
+);
+
 const Segmented = ({ label, options, value, onChange }) => (
   <div role="radiogroup" aria-label={label} className="flex gap-1 rounded-xl bg-slate-100 p-1">
     {options.map((option) => (
@@ -290,7 +318,22 @@ const PaceCalculator = ({ onPacePerKmChange }) => {
           </div>
         </div>
 
-        <div className="mt-6 rounded-xl bg-slate-900 px-5 py-6 text-center text-white">
+        <div className="relative mt-6 rounded-xl bg-slate-900 px-5 py-6 text-center text-white">
+          <button
+            type="button"
+            onClick={copyLink}
+            aria-label={copied ? 'Link copied' : 'Copy shareable link'}
+            title={copied ? 'Link copied' : 'Copy shareable link'}
+            className={`absolute right-2 top-2 rounded-lg p-2 transition hover:bg-white/10 ${
+              copied ? 'text-emerald-400' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            {copied ? <CheckIcon /> : <LinkIcon />}
+          </button>
+          <span role="status" className="sr-only">
+            {copied ? 'Link copied to clipboard' : ''}
+          </span>
+
           <div className="text-xs font-medium uppercase tracking-wide text-slate-400">
             {showingTime ? 'Finish time' : `Required pace (per ${unitLabel})`}
           </div>
@@ -319,13 +362,6 @@ const PaceCalculator = ({ onPacePerKmChange }) => {
           )}
         </div>
 
-        <button
-          type="button"
-          onClick={copyLink}
-          className="mt-3 w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
-        >
-          {copied ? 'Link copied' : 'Copy shareable link'}
-        </button>
       </section>
 
       {splits.length > 1 && (
