@@ -9,14 +9,15 @@ import {
   zoneForPace,
 } from './paceMath';
 import { ZONE_STYLES } from './zoneStyles';
+import { ARTICLES } from './articles';
 
-// Keep these questions in sync with the FAQPage JSON-LD in public/index.html —
-// structured data has to match what's actually on the page.
+// Keep these questions in sync with the FAQPage JSON-LD in public/index.html.
+// Structured data has to match what's actually on the page.
 const FAQ = [
   {
     question: 'How do I convert min/km to min/mile?',
     answer:
-      'Multiply by 1.609. A 5:00/km pace is 8:03/mile; to go the other way, divide by 1.609. Switching units above does this for you, and your finish time stays the same — the distance has not changed, only the units it is described in.',
+      'Multiply by 1.609. A 5:00/km pace is 8:03/mile; to go the other way, divide by 1.609. Switching units above does this for you, and your finish time stays the same, because the distance has not changed, only the units it is described in.',
   },
   {
     question: 'What do the pace zones mean?',
@@ -26,17 +27,17 @@ const FAQ = [
   {
     question: 'What is a good 5K time?',
     answer:
-      'It depends heavily on age, sex and training history, so treat any single number with suspicion. As rough orientation for adults: 30–35 minutes is a common first-timer result, under 25 minutes suggests consistent training, and under 20 minutes is competitive club standard. Beating your own previous time is a more useful measure than any table.',
+      'It depends heavily on age, sex and training history, so treat any single number with suspicion. As rough orientation for adults: 30 to 35 minutes is a common first-timer result, under 25 minutes suggests consistent training, and under 20 minutes is competitive club standard. Beating your own previous time is a more useful measure than any table.',
   },
   {
     question: 'What is a negative split?',
     answer:
-      'Running the second half of a race faster than the first. Most personal bests are run this way and most blow-ups come from starting too fast, so it is a common strategy. Choose "Negative 1%" or "Negative 2%" in the split table to see the pacing it implies for the same finish time.',
+      'Running the second half of a race faster than the first. Most personal bests are run this way and most blow-ups come from starting too fast, so it is a common strategy. Set a negative split percentage in the split table to see the pacing it implies for the same finish time.',
   },
   {
     question: 'Why does my actual race time not match the calculator?',
     answer:
-      'The calculator assumes even effort on flat ground. Real races add hills, wind, heat, a congested start, and fatigue over distance — and GPS watches drift from the measured course. Treat the splits as a plan, not a promise.',
+      'The calculator assumes even effort on flat ground. Real races add hills, wind, heat, a congested start, and fatigue over distance, and GPS watches drift from the measured course. Treat the splits as a plan, not a promise.',
   },
   {
     question: 'Should I pace in kilometres or miles?',
@@ -47,8 +48,8 @@ const FAQ = [
 
 const REFERENCE_PACES_PER_KM = [210, 240, 270, 300, 330, 360, 390, 420, 450, 480];
 
-// Only highlight a row when the current pace is genuinely close to it —
-// otherwise the nearest row is misleading rather than helpful.
+// Only highlight a row when the current pace is genuinely close to it.
+// Otherwise the nearest row is misleading rather than helpful.
 const HIGHLIGHT_TOLERANCE_SECONDS = 15;
 
 const nearestReferencePace = (target) => {
@@ -134,9 +135,26 @@ const SiteContent = ({ highlightPacePerKm }) => (
         shows the elapsed time you should see at every marker along the way.
       </p>
       <p className="mt-2 text-sm leading-relaxed text-slate-600">
-        Everything runs in your browser — nothing is uploaded, and the link you copy carries your
+        Everything runs in your browser. Nothing is uploaded, and the link you copy carries your
         settings so you can send a pacing plan to a training partner.
       </p>
+    </section>
+
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <h2 className="text-base font-semibold text-slate-900">Guides</h2>
+      <ul className="mt-3 divide-y divide-slate-100">
+        {ARTICLES.map((article) => (
+          <li key={article.slug} className="py-3 first:pt-0 last:pb-0">
+            <a
+              href={`/${article.slug}/`}
+              className="text-sm font-medium text-blue-700 hover:underline"
+            >
+              {article.title}
+            </a>
+            <p className="mt-1 text-sm leading-relaxed text-slate-600">{article.description}</p>
+          </li>
+        ))}
+      </ul>
     </section>
 
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">

@@ -7,7 +7,7 @@ const sample = {
   mode: 'timeFromPace',
   paceSeconds: 483,
   totalSeconds: 12659,
-  strategy: 'neg1',
+  negativeSplitPct: 1,
 };
 
 describe('encode/decode round trip', () => {
@@ -17,7 +17,7 @@ describe('encode/decode round trip', () => {
     expect(decoded.unit).toBe('mi');
     expect(decoded.mode).toBe('timeFromPace');
     expect(decoded.paceSeconds).toBe(483);
-    expect(decoded.strategy).toBe('neg1');
+    expect(decoded.negativeSplitPct).toBe(1);
   });
 
   test('preserves a custom distance', () => {
@@ -32,8 +32,12 @@ describe('encode/decode round trip', () => {
     expect(decoded.totalSeconds).toBe(12659);
   });
 
-  test('omits the strategy when even', () => {
-    expect(encodeState({ ...sample, strategy: 'even' })).not.toContain('s=');
+  test('omits the split percentage when even', () => {
+    expect(encodeState({ ...sample, negativeSplitPct: 0 })).not.toContain('s=');
+  });
+
+  test('carries a half-percent step', () => {
+    expect(decodeState(encodeState({ ...sample, negativeSplitPct: 2.5 })).negativeSplitPct).toBe(2.5);
   });
 });
 
@@ -61,9 +65,15 @@ describe('decoding untrusted input', () => {
     expect(decodeState('?d=999999999').selectedKey).toBe(DEFAULT_STATE.selectedKey);
   });
 
-  test('falls back on an unknown unit or strategy', () => {
+  test('falls back on an unknown unit or split value', () => {
     const decoded = decodeState('?u=parsecs&s=rocket');
     expect(decoded.unit).toBe('km');
-    expect(decoded.strategy).toBe('even');
+    expect(decoded.negativeSplitPct).toBe(0);
+  });
+
+  test('clamps and snaps an out-of-range split percentage', () => {
+    expect(decodeState('?s=99').negativeSplitPct).toBe(5);
+    expect(decodeState('?s=-3').negativeSplitPct).toBe(0);
+    expect(decodeState('?s=1.3').negativeSplitPct).toBe(1.5);
   });
 });

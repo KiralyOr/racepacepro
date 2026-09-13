@@ -110,7 +110,7 @@ describe('zoneForPace', () => {
   });
 
   test('converts a mile pace before classifying', () => {
-    // 8:03/mile is 5:00/km, which is steady — not the recovery pace the raw
+    // 8:03/mile is 5:00/km, which is steady, not the recovery pace the raw
     // number would suggest against per-kilometre boundaries.
     expect(zoneForPace(483, 'mi').id).toBe('steady');
     expect(zoneForPace(483, 'km').id).toBe('recovery');

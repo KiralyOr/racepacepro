@@ -1,4 +1,4 @@
-// Full class strings, not built by interpolation — Tailwind only ships classes
+// Full class strings, not built by interpolation. Tailwind only ships classes
 // it can find literally in the source.
 export const ZONE_STYLES = {
   interval: { pill: 'bg-red-50 text-red-700', dot: 'bg-red-600' },

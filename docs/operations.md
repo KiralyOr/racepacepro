@@ -1,16 +1,16 @@
 # Operations
 
-Hosting, domain, and search setup for racepacepro.com. Not needed to develop the app —
-see `CLAUDE.md` for that.
+Hosting, domain, and search setup for racepacepro.com. Not needed to develop the app.
+See `CLAUDE.md` for that.
 
 ## Pending manual steps
 
 These need account access (Google, GoDaddy) and can't be done from the repo.
 
-- [ ] **Google Search Console** — verify the domain and submit the sitemap (steps below)
-- [ ] **Check the social card** — send `https://racepacepro.com` to yourself on WhatsApp, or
+- [ ] **Google Search Console**: verify the domain and submit the sitemap (steps below)
+- [ ] **Check the social card**: send `https://racepacepro.com` to yourself on WhatsApp, or
       paste it into <https://www.opengraph.xyz>. Should show the blue stopwatch card.
-- [ ] **Cancel GoDaddy Websites + Marketing** if it's a paid plan — the builder site is
+- [ ] **Cancel GoDaddy Websites + Marketing** if it's a paid plan. The builder site is
       disconnected and serving nothing. Check <https://account.godaddy.com/subscriptions>.
       Cancel only that plan, **never** the domain registration.
 
@@ -30,6 +30,12 @@ These need account access (Google, GoDaddy) and can't be done from the repo.
 
 Impressions data takes days to weeks to appear.
 
+The sitemap is generated at build time and lists the home page plus every page
+under `/pace/`, 35 URLs at the time of writing. Watch the **Pages** report in
+Search Console after submitting: if the generated pages get indexed but attract
+no impressions after a couple of months, that is the signal the keyword targets
+are wrong, not that more pages are needed.
+
 ## How the domain is wired
 
 `racepacepro.com` is registered at GoDaddy, DNS is hosted by GoDaddy
@@ -40,11 +46,11 @@ Impressions data takes days to weeks to appear.
 | A     | `@`  | `76.76.21.21`          |
 | CNAME | `www`| `cname.vercel-dns.com.`|
 
-There are no MX records, so nothing here affects email. Nameservers stay at GoDaddy —
-do not move them to Vercel, that would take DNS management with it.
+There are no MX records, so nothing here affects email. Nameservers stay at GoDaddy.
+Do not move them to Vercel, that would take DNS management with it.
 
 The domain is added under the Vercel **team**-level Domains page
-(<https://vercel.com/kiralyors-projects/~/domains>), not project settings — this Vercel
+(<https://vercel.com/kiralyors-projects/~/domains>), not project settings, because this Vercel
 version moved it.
 
 ## Two traps worth remembering
@@ -56,7 +62,7 @@ Vercel says. If the A record ever reverts, a builder site has been reconnected.
 
 **`homepage` in `package.json` must stay `"."`.** An absolute URL there bakes a
 `/racepacepro/` prefix onto every asset, which works on the GitHub Pages subpath but
-404s at a domain root — the Vercel site renders blank. See `CLAUDE.md`.
+404s at a domain root, so the Vercel site renders blank. See `CLAUDE.md`.
 
 ## Deploy targets
 
@@ -67,5 +73,5 @@ A push to `main` deploys twice, both automatic:
   `https://kiralyor.github.io/racepacepro`.
 
 The GitHub Pages copy is a leftover from before the domain moved to Vercel. It's harmless
-but redundant, and it's a second URL serving the same content — worth retiring if search
+but redundant, and it's a second URL serving the same content, worth retiring if search
 ever shows the two competing.

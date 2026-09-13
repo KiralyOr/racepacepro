@@ -114,17 +114,25 @@ describe('splits', () => {
     render(<PaceCalculator />);
     const before = finishTime();
 
-    fireEvent.change(screen.getByLabelText('Split strategy'), { target: { value: 'neg2' } });
+    fireEvent.change(screen.getByLabelText('Split strategy'), { target: { value: '2' } });
 
     expect(finishTime()).toBe(before);
     expect(screen.getByText(/Halfway · second half 2% quicker/)).toBeInTheDocument();
+  });
+
+  test('offers half-percent steps up to five percent', () => {
+    render(<PaceCalculator />);
+    const options = Array.from(screen.getByLabelText('Split strategy').options).map((o) => o.value);
+    expect(options[0]).toBe('0');
+    expect(options).toContain('2.5');
+    expect(options[options.length - 1]).toBe('5');
   });
 
   test('marks halfway only when a negative split is selected', () => {
     render(<PaceCalculator />);
     expect(screen.queryByText(/Halfway/)).not.toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText('Split strategy'), { target: { value: 'neg1' } });
+    fireEvent.change(screen.getByLabelText('Split strategy'), { target: { value: '1' } });
     expect(screen.getByText(/Halfway/)).toBeInTheDocument();
   });
 });

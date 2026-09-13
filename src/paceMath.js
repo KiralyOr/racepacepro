@@ -44,7 +44,7 @@ export const paceFromTotalTime = (totalSeconds, distanceInUnit) =>
   distanceInUnit > 0 ? totalSeconds / distanceInUnit : 0;
 
 // Boundaries are seconds per kilometre; a pace given in miles is converted
-// before classifying. These are a broad guide only — real training zones are
+// before classifying. These are a broad guide only. Real training zones are
 // individual and derive from a recent race or threshold test, which is why the
 // UI says so wherever a zone is shown.
 export const PACE_ZONES = [
@@ -61,11 +61,26 @@ export const zoneForPace = (paceSeconds, unit = 'km') => {
   return PACE_ZONES.find((zone) => perKm < zone.maxSecondsPerKm);
 };
 
-export const SPLIT_STRATEGIES = [
-  { id: 'even', label: 'Even', fraction: 0 },
-  { id: 'neg1', label: 'Negative 1%', fraction: 0.01 },
-  { id: 'neg2', label: 'Negative 2%', fraction: 0.02 },
-];
+// How much faster the second half is run than the first, as a percentage.
+// Zero is even effort. Past about 5% the first half is so conservative that
+// the plan stops resembling a race.
+export const MAX_NEGATIVE_SPLIT_PCT = 5;
+export const NEGATIVE_SPLIT_STEP = 0.5;
+
+export const negativeSplitOptions = () => {
+  const steps = [];
+  for (let pct = 0; pct <= MAX_NEGATIVE_SPLIT_PCT + 1e-9; pct += NEGATIVE_SPLIT_STEP) {
+    steps.push(Math.round(pct * 2) / 2);
+  }
+  return steps;
+};
+
+export const clampNegativeSplitPct = (value) => {
+  const pct = Number(value);
+  if (!Number.isFinite(pct)) return 0;
+  const snapped = Math.round(pct / NEGATIVE_SPLIT_STEP) * NEGATIVE_SPLIT_STEP;
+  return Math.min(MAX_NEGATIVE_SPLIT_PCT, Math.max(0, snapped));
+};
 
 // Cap the row count so an absurd custom distance can't generate a table
 // long enough to lock up the page.
