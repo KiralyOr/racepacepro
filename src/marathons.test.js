@@ -1,4 +1,11 @@
-import { MARATHONS, marathonById } from './marathons';
+import {
+  FEATURED_IDS,
+  FEATURED_MARATHONS,
+  MARATHONS,
+  RELATED_LIMIT,
+  marathonById,
+  relatedRaces,
+} from './marathons';
 
 describe('marathon data', () => {
   test('ids are unique and URL safe', () => {
@@ -51,5 +58,34 @@ describe('no time sensitive claims', () => {
         /^(January|February|March|April|May|June|July|August|September|October|November|December)$/
       )
     );
+  });
+});
+
+describe('cross linking', () => {
+  test('the home page features a subset, not the whole list', () => {
+    expect(FEATURED_MARATHONS.length).toBeLessThan(MARATHONS.length);
+    FEATURED_MARATHONS.forEach((race) => expect(race).toBeDefined());
+    expect(new Set(FEATURED_IDS).size).toBe(FEATURED_IDS.length);
+  });
+
+  test('every featured id refers to a real race', () => {
+    FEATURED_IDS.forEach((id) => expect(marathonById(id)).toBeDefined());
+  });
+
+  test('related races never include the race itself and stay within the limit', () => {
+    MARATHONS.forEach((race) => {
+      const related = relatedRaces(race);
+      expect(related.length).toBe(RELATED_LIMIT);
+      expect(related.map((r) => r.id)).not.toContain(race.id);
+      expect(new Set(related.map((r) => r.id)).size).toBe(related.length);
+    });
+  });
+
+  test('races in the same country are preferred', () => {
+    const boston = marathonById('boston');
+    const ids = relatedRaces(boston).map((r) => r.id);
+    // Chicago, New York, Marine Corps, Big Sur and Honolulu share a country.
+    expect(ids).toContain('chicago');
+    expect(ids).toContain('new-york');
   });
 });

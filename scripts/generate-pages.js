@@ -42,7 +42,9 @@ const loadModule = (request) => {
 const { formatClock, formatPace } = loadModule(path.join(ROOT, 'src/paceMath.js'));
 const { RACES, SITE_ORIGIN, allPages, hubPage } = loadModule(path.join(ROOT, 'src/pageData.js'));
 const { ARTICLES } = loadModule(path.join(ROOT, 'src/articles.js'));
-const { MARATHONS } = loadModule(path.join(ROOT, 'src/marathons.js'));
+const { MARATHONS, FEATURED_MARATHONS, relatedRaces } = loadModule(
+  path.join(ROOT, 'src/marathons.js')
+);
 const { ABOUT, FAQ } = loadModule(path.join(ROOT, 'src/homeContent.js'));
 const { analyticsHtml } = loadModule(path.join(ROOT, 'src/analytics.js'));
 const { PREDICTOR_PAGE, predictorTables } = loadModule(path.join(ROOT, 'src/predictorData.js'));
@@ -355,10 +357,11 @@ const marathonBody = (race, REL) => `
 <div class="card">
   <h2>Other marathons</h2>
   <div class="links">
-    ${MARATHONS.filter((other) => other.id !== race.id)
+    ${relatedRaces(race)
       .map((other) => `<a href="${REL}marathons/${other.id}/">${esc(other.name)}</a>`)
       .join('')}
   </div>
+  <p><a href="${REL}marathons/">All ${MARATHONS.length} pacing guides</a></p>
 </div>`;
 
 const predictorBody = (REL) => `
@@ -465,14 +468,14 @@ const homeStaticHtml = () => `
     <p class="${PARA}">What each course does to your splits. Berlin and Valencia let you hold one
     pace, Boston punishes you for it, and New York asks for uneven splits by design.</p>
     <div class="mt-3 flex flex-wrap gap-2">
-      ${MARATHONS.map(
+      ${FEATURED_MARATHONS.map(
         (race) =>
           `<a href="marathons/${race.id}/" class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">${esc(
             race.name
           )}</a>`
       ).join('')}
     </div>
-    <p class="mt-3 text-sm"><a href="marathons/" class="font-medium text-blue-700 hover:underline">All marathon pacing guides</a></p>
+    <p class="mt-3 text-sm"><a href="marathons/" class="font-medium text-blue-700 hover:underline">All ${MARATHONS.length} marathon pacing guides</a></p>
   </section>
 
   <section class="${CARD}">
