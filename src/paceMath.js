@@ -43,6 +43,24 @@ export const totalTimeFromPace = (paceSecondsPerUnit, distanceInUnit) =>
 export const paceFromTotalTime = (totalSeconds, distanceInUnit) =>
   distanceInUnit > 0 ? totalSeconds / distanceInUnit : 0;
 
+// Boundaries are seconds per kilometre; a pace given in miles is converted
+// before classifying. These are a broad guide only — real training zones are
+// individual and derive from a recent race or threshold test, which is why the
+// UI says so wherever a zone is shown.
+export const PACE_ZONES = [
+  { id: 'interval', label: 'Interval', maxSecondsPerKm: 240 },
+  { id: 'threshold', label: 'Threshold', maxSecondsPerKm: 285 },
+  { id: 'steady', label: 'Steady', maxSecondsPerKm: 330 },
+  { id: 'easy', label: 'Easy', maxSecondsPerKm: 390 },
+  { id: 'recovery', label: 'Recovery', maxSecondsPerKm: Infinity },
+];
+
+export const zoneForPace = (paceSeconds, unit = 'km') => {
+  const perKm = unit === 'mi' ? paceSeconds / KM_PER_MILE : paceSeconds;
+  if (!Number.isFinite(perKm) || perKm <= 0) return null;
+  return PACE_ZONES.find((zone) => perKm < zone.maxSecondsPerKm);
+};
+
 export const SPLIT_STRATEGIES = [
   { id: 'even', label: 'Even', fraction: 0 },
   { id: 'neg1', label: 'Negative 1%', fraction: 0.01 },

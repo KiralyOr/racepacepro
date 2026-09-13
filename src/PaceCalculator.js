@@ -13,8 +13,10 @@ import {
   splitTime,
   totalTimeFromPace,
   unitToKm,
+  zoneForPace,
 } from './paceMath';
 import { encodeState, initialState, persist, shareUrl } from './urlState';
+import { ZONE_STYLES } from './zoneStyles';
 
 const CUSTOM = 'custom';
 
@@ -75,7 +77,7 @@ const TimeSelect = ({ label, value, options, onChange, pad }) => (
   </label>
 );
 
-const PaceCalculator = () => {
+const PaceCalculator = ({ onPacePerKmChange }) => {
   const [state, setState] = useState(initialState);
   const [copied, setCopied] = useState(false);
   const { selectedKey, customValue, unit, mode, paceSeconds, totalSeconds, strategy } = state;
@@ -103,6 +105,13 @@ const PaceCalculator = () => {
   useEffect(() => {
     persist(encodeState(state));
   }, [state]);
+
+  // The reference table below the calculator highlights the row nearest the
+  // current pace, so it needs the value normalised to seconds per kilometre.
+  useEffect(() => {
+    if (!onPacePerKmChange) return;
+    onPacePerKmChange(unit === 'mi' ? convertPace(paceSeconds, 'mi', 'km') : paceSeconds);
+  }, [paceSeconds, unit, onPacePerKmChange]);
 
   useEffect(() => {
     if (!copied) return undefined;
@@ -134,6 +143,8 @@ const PaceCalculator = () => {
   const fraction = SPLIT_STRATEGIES.find((s) => s.id === strategy)?.fraction ?? 0;
   const splits = buildSplits(distanceInUnit, totalSeconds, fraction);
   const showingTime = mode === 'timeFromPace';
+  const zone = zoneForPace(paceSeconds, unit);
+  const halfway = distanceInUnit / 2;
 
   return (
     <div className="space-y-4">
@@ -288,6 +299,17 @@ const PaceCalculator = () => {
                   Math.round(distanceInUnit * 100) / 100
                 )} ${unitLabel}`}
           </div>
+          {zone && (
+            <div className="mt-3">
+              <span
+                className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
+                  ZONE_STYLES[zone.id].pill
+                }`}
+              >
+                {zone.label} pace
+              </span>
+            </div>
+          )}
         </div>
 
         <button
@@ -320,12 +342,6 @@ const PaceCalculator = () => {
             </label>
           </div>
 
-          {fraction > 0 && (
-            <p className="mt-2 text-sm text-slate-500">
-              Second half run {Math.round(fraction * 100)}% faster than the first, same finish time.
-            </p>
-          )}
-
           <div className="mt-3 max-h-80 overflow-y-auto">
             <table className="w-full text-sm">
               <thead className="sticky top-0 bg-white">
@@ -335,17 +351,40 @@ const PaceCalculator = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {splits.map((split) => (
-                  <tr
-                    key={split.distance}
-                    className={split.isFinish ? 'font-semibold text-blue-700' : 'text-slate-700'}
-                  >
-                    <td className="py-2 tabular-nums">
-                      {formatDistance(split.distance)} {unitLabel}
-                    </td>
-                    <td className="py-2 text-right tabular-nums">{formatClock(split.seconds)}</td>
-                  </tr>
-                ))}
+                {splits.map((split, index) => {
+                  const crossesHalfway =
+                    fraction > 0 &&
+                    split.distance > halfway &&
+                    (index === 0 || splits[index - 1].distance <= halfway);
+
+                  return (
+                    <React.Fragment key={split.distance}>
+                      {crossesHalfway && (
+                        <tr>
+                          <td colSpan={2} className="pt-2 pb-1">
+                            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+                              <span className="h-px flex-1 bg-emerald-200" />
+                              Halfway · second half {Math.round(fraction * 100)}% quicker
+                              <span className="h-px flex-1 bg-emerald-200" />
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                      <tr
+                        className={
+                          split.isFinish ? 'font-semibold text-blue-700' : 'text-slate-700'
+                        }
+                      >
+                        <td className="py-2 tabular-nums">
+                          {formatDistance(split.distance)} {unitLabel}
+                        </td>
+                        <td className="py-2 text-right tabular-nums">
+                          {formatClock(split.seconds)}
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  );
+                })}
               </tbody>
             </table>
           </div>

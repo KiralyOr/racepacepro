@@ -12,6 +12,7 @@ import {
   splitTime,
   totalTimeFromPace,
   unitToKm,
+  zoneForPace,
 } from './paceMath';
 
 describe('distance conversion', () => {
@@ -96,6 +97,28 @@ describe('formatting', () => {
 
   test('pads pace seconds', () => {
     expect(formatPace(303)).toBe('5:03');
+  });
+});
+
+describe('zoneForPace', () => {
+  test('classifies paces given in kilometres', () => {
+    expect(zoneForPace(200, 'km').id).toBe('interval');
+    expect(zoneForPace(270, 'km').id).toBe('threshold');
+    expect(zoneForPace(300, 'km').id).toBe('steady');
+    expect(zoneForPace(360, 'km').id).toBe('easy');
+    expect(zoneForPace(500, 'km').id).toBe('recovery');
+  });
+
+  test('converts a mile pace before classifying', () => {
+    // 8:03/mile is 5:00/km, which is steady — not the recovery pace the raw
+    // number would suggest against per-kilometre boundaries.
+    expect(zoneForPace(483, 'mi').id).toBe('steady');
+    expect(zoneForPace(483, 'km').id).toBe('recovery');
+  });
+
+  test('is undefined for a nonsense pace', () => {
+    expect(zoneForPace(0, 'km')).toBeNull();
+    expect(zoneForPace(NaN, 'km')).toBeNull();
   });
 });
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PaceCalculator from './PaceCalculator';
 import SiteContent from './SiteContent';
 import './index.css';
@@ -12,7 +12,11 @@ const Logo = () => (
   </svg>
 );
 
-const App = () => (
+const App = () => {
+  // Lifted so the reference table can highlight the row nearest the current pace.
+  const [pacePerKm, setPacePerKm] = useState(null);
+
+  return (
   <div className="min-h-screen bg-slate-50">
     <header className="border-b border-slate-200 bg-white">
       <div className="mx-auto flex max-w-2xl items-center gap-2.5 px-4 py-4">
@@ -30,8 +34,8 @@ const App = () => (
         5K, 10K, half marathon, marathon or any distance you choose, in kilometres or miles.
       </p>
 
-      <PaceCalculator />
-      <SiteContent />
+      <PaceCalculator onPacePerKmChange={setPacePerKm} />
+      <SiteContent highlightPacePerKm={pacePerKm} />
     </main>
 
     <footer className="border-t border-slate-200 bg-white">
@@ -40,6 +44,7 @@ const App = () => (
       </div>
     </footer>
   </div>
-);
+  );
+};
 
 export default App;

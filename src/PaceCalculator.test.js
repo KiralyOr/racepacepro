@@ -77,7 +77,37 @@ describe('splits', () => {
     fireEvent.change(screen.getByLabelText('Split strategy'), { target: { value: 'neg2' } });
 
     expect(finishTime()).toBe(before);
-    expect(screen.getByText(/Second half run 2% faster/)).toBeInTheDocument();
+    expect(screen.getByText(/Halfway · second half 2% quicker/)).toBeInTheDocument();
+  });
+
+  test('marks halfway only when a negative split is selected', () => {
+    render(<PaceCalculator />);
+    expect(screen.queryByText(/Halfway/)).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText('Split strategy'), { target: { value: 'neg1' } });
+    expect(screen.getByText(/Halfway/)).toBeInTheDocument();
+  });
+});
+
+describe('pace zones', () => {
+  test('labels the default 5:00/km as steady', () => {
+    render(<PaceCalculator />);
+    expect(screen.getByText('Steady pace')).toBeInTheDocument();
+  });
+
+  test('follows the pace into a different zone', () => {
+    render(<PaceCalculator />);
+    fireEvent.change(screen.getByLabelText('min'), { target: { value: '3' } });
+    expect(screen.getByText('Interval pace')).toBeInTheDocument();
+  });
+
+  test('reports the pace in per-kilometre terms regardless of unit', () => {
+    const seen = [];
+    render(<PaceCalculator onPacePerKmChange={(v) => seen.push(v)} />);
+    fireEvent.click(screen.getByRole('radio', { name: 'Miles' }));
+
+    // 5:00/km shown as 8:03/mile must still report ~300 s/km, not ~483.
+    expect(seen[seen.length - 1]).toBeCloseTo(300, 0);
   });
 });
 
