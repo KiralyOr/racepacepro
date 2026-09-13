@@ -1,0 +1,87 @@
+# Race Pace Pro
+
+> Free running pace calculator for 5K, 10K, half marathon and marathon. Work out a finish time from a target pace, or the pace a goal time demands, with full split tables and negative split pacing.
+
+The marathon pages carry no dates, ballot windows or entry deadlines. Those change every year and this project does not verify them, so each page links to the official race site for anything time sensitive. The month a race is held is stated, because that is stable.
+
+Race Pace Pro is independent and is not affiliated with, endorsed by or sponsored by any race it names.
+
+Every figure on the site is computed from one shared maths module, so the calculator, the static pace charts and the race time predictor cannot disagree with each other.
+
+## Tools
+
+- [Running pace calculator](https://racepacepro.com/): Free running pace calculator for 5K, 10K, half marathon and marathon. Work out a finish time from a target pace, or the pace a goal time demands, with full split tables and negative split pacing.
+- [Race time predictor](https://racepacepro.com/predictor/): Predict your finish time at any distance from a recent race result. Riegel formula tables for 5K, 10K, half marathon and marathon, with the pace each one needs.
+
+## Pace charts
+
+- [All pace charts](https://racepacepro.com/pace/): Index of the four distance charts, each listing every common goal time with the pace it demands per kilometre and per mile.
+- [5K Pace Chart](https://racepacepro.com/pace/5k/): 5K pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
+- [10K Pace Chart](https://racepacepro.com/pace/10k/): 10K pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
+- [Half Marathon Pace Chart](https://racepacepro.com/pace/half-marathon/): Half Marathon pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
+- [Marathon Pace Chart](https://racepacepro.com/pace/marathon/): Marathon pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
+
+## Marathon pacing guides
+
+- [All marathon pacing guides](https://racepacepro.com/marathons/): Index of 22 races, each covering what that specific course does to your splits and how to plan for it.
+- [Berlin Marathon](https://racepacepro.com/marathons/berlin/): Flat and fast. Berlin, Germany, held in September. The flattest and fastest of the big city marathons, and the course where most marathon world records have been set. Wide roads, few sharp turns, and cool late September air.
+- [London Marathon](https://racepacepro.com/marathons/london/): Flat with a downhill start. London, United Kingdom, held in April. A fast, flat course through the city from Blackheath to The Mall, with an early descent, enormous crowds, and a long stretch through the Docklands in the second half.
+- [Boston Marathon](https://racepacepro.com/marathons/boston/): Net downhill, deceptively hard. Boston, United States, held in April. A point to point course from Hopkinton that loses height overall but is nothing like flat. The early descent is severe, the Newton hills arrive when you are already tired, and entry generally requires a qualifying time.
+- [Chicago Marathon](https://racepacepro.com/marathons/chicago/): Flat and fast. Chicago, United States, held in October. A flat loop through the city neighbourhoods that starts and finishes in Grant Park. Fast, well supported, and one of the more reliable places to chase a personal best.
+- [New York City Marathon](https://racepacepro.com/marathons/new-york/): Rolling, with bridges. New York, United States, held in November. Five boroughs, five bridges, and the hardest course of the big city marathons to run a fast time on. Spectacular, and not the place to chase a personal best.
+- [Tokyo Marathon](https://racepacepro.com/marathons/tokyo/): Flat with out and back sections. Tokyo, Japan, held in March. A flat, superbly organised course through central Tokyo with several out and back sections. Cool March conditions and famously precise crowd management.
+- [Valencia Marathon](https://racepacepro.com/marathons/valencia/): Flat and very fast. Valencia, Spain, held in December. Flat, cool and organised around going fast. Valencia has built a reputation as the place to run a personal best, and the December date puts conditions close to ideal.
+- [Prague Marathon](https://racepacepro.com/marathons/prague/): Flat, with cobbled sections. Prague, Czech Republic, held in May. A flat loop through the old city, starting and finishing on Old Town Square, with river embankment stretches that are fast and cobbled sections that are not.
+- [Paris Marathon](https://racepacepro.com/marathons/paris/): Flat, with cobbles and tunnels. Paris, France, held in April. From the Champs-Elysees out through the Bois de Vincennes, back along the Seine and into the Bois de Boulogne. Gently rolling rather than hilly, with cobbled stretches and a series of riverside tunnels.
+- [Amsterdam Marathon](https://racepacepro.com/marathons/amsterdam/): Flat and fast. Amsterdam, Netherlands, held in October. Starts and finishes inside the Olympic Stadium, with a long stretch out along the Amstel river between. Flat throughout, cool October air, and a dependable choice for a personal best.
+- [Rotterdam Marathon](https://racepacepro.com/marathons/rotterdam/): Flat, with two bridge crossings. Rotterdam, Netherlands, held in April. Flat and quick through a modern city, with the Erasmus Bridge crossed early and again close to the finish. A long standing personal best course with a fast field.
+- [Frankfurt Marathon](https://racepacepro.com/marathons/frankfurt/): Flat and fast. Frankfurt, Germany, held in October. A flat loop through the city with an unusual ending: the last stretch moves indoors into the Festhalle, finishing on a red carpet under lights rather than on open road.
+- [Seville Marathon](https://racepacepro.com/marathons/seville/): Among the flattest major courses. Seville, Spain, held in February. Almost entirely flat through a compact historic city, run in cool February air. It has built a reputation as one of the fastest courses in Europe and draws a field that comes specifically for the time.
+- [Vienna City Marathon](https://racepacepro.com/marathons/vienna/): Flat, shared with the half marathon. Vienna, Austria, held in April. Flat, along the Danube and through the centre of the city. The half marathon runs the same roads until the courses split, and that shared start is the defining pacing problem of the race.
+- [Athens Marathon](https://racepacepro.com/marathons/athens/): Uphill for two thirds. Athens, Greece, held in November. The original route, from the town of Marathon to the Panathenaic Stadium in Athens. It climbs almost continuously from roughly 10 km to 31 km, which makes it one of the hardest of the well known marathon courses.
+- [Rome Marathon](https://racepacepro.com/marathons/rome/): Flat, with extensive cobbles. Rome, Italy, held in March. A loop through the historic centre past the Colosseum and across the river toward the Vatican. The elevation is gentle; the basalt setts the old city is paved with are what shape the race.
+- [Dublin Marathon](https://racepacepro.com/marathons/dublin/): Rolling, with the hills late. Dublin, Ireland, held in October. Out through Phoenix Park and back into the city, rolling rather than flat, with the hardest climbing saved for the last third when it does the most damage.
+- [Edinburgh Marathon](https://racepacepro.com/marathons/edinburgh/): Net downhill, coastal and exposed. Edinburgh, United Kingdom, held in May. Starts in the city and runs out along the coast into East Lothian. Net downhill overall, with a long exposed out and back section where the wind, not the gradient, decides how the day goes.
+- [Marine Corps Marathon](https://racepacepro.com/marathons/marine-corps/): Rolling, with a hard finish. Washington, United States, held in October. A rolling course through Washington and Arlington, known for its organisation and its atmosphere, and for a finish that climbs to the Marine Corps War Memorial.
+- [Big Sur Marathon](https://racepacepro.com/marathons/big-sur/): Hilly, exposed and scenic. Big Sur, United States, held in April. A point to point along the Pacific coast highway, taking in a long climb to Hurricane Point and the crossing at Bixby Bridge. Spectacular, exposed, and slow by design rather than by accident.
+- [Honolulu Marathon](https://racepacepro.com/marathons/honolulu/): Hot and humid, with Diamond Head twice. Honolulu, United States, held in December. A large, welcoming race with no time limit, run in tropical conditions with two passes of Diamond Head. Heat and humidity, rather than the elevation profile, are what shape the pacing.
+- [Gold Coast Marathon](https://racepacepro.com/marathons/gold-coast/): Flat and fast. Gold Coast, Australia, held in July. A flat out and back along the coast, run in the middle of the southern winter, which on this stretch of Queensland coast means mild and dry. One of the fastest courses in the southern hemisphere.
+
+## Guides
+
+- [All guides](https://racepacepro.com/guides/): Index of the long form guides on marathon training and setting a realistic goal time.
+- [How to Run Your First Marathon](https://racepacepro.com/guides/first-marathon/): What first marathon training actually involves: the base you need, how the long run builds, picking a goal time, and the pacing mistake that costs most first-timers their race.
+- [How to Set a Realistic Marathon Goal Time](https://racepacepro.com/guides/marathon-goal-time/): Use a recent race result rather than a round number. The Riegel formula, worked examples, the adjustments worth making, and how to sanity check the pace before you commit to it.
+
+## Optional
+
+- [Sub-15 5K Pace and Splits](https://racepacepro.com/pace/sub-15-5k/): To run a sub-15 5k you need 3:00 per km (4:50 per mile). Full split table and pacing guidance.
+- [Sub-18 5K Pace and Splits](https://racepacepro.com/pace/sub-18-5k/): To run a sub-18 5k you need 3:36 per km (5:48 per mile). Full split table and pacing guidance.
+- [Sub-20 5K Pace and Splits](https://racepacepro.com/pace/sub-20-5k/): To run a sub-20 5k you need 4:00 per km (6:26 per mile). Full split table and pacing guidance.
+- [Sub-22 5K Pace and Splits](https://racepacepro.com/pace/sub-22-5k/): To run a sub-22 5k you need 4:24 per km (7:05 per mile). Full split table and pacing guidance.
+- [Sub-25 5K Pace and Splits](https://racepacepro.com/pace/sub-25-5k/): To run a sub-25 5k you need 5:00 per km (8:03 per mile). Full split table and pacing guidance.
+- [Sub-30 5K Pace and Splits](https://racepacepro.com/pace/sub-30-5k/): To run a sub-30 5k you need 6:00 per km (9:39 per mile). Full split table and pacing guidance.
+- [Sub-35 5K Pace and Splits](https://racepacepro.com/pace/sub-35-5k/): To run a sub-35 5k you need 7:00 per km (11:16 per mile). Full split table and pacing guidance.
+- [Sub-35 10K Pace and Splits](https://racepacepro.com/pace/sub-35-10k/): To run a sub-35 10k you need 3:30 per km (5:38 per mile). Full split table and pacing guidance.
+- [Sub-40 10K Pace and Splits](https://racepacepro.com/pace/sub-40-10k/): To run a sub-40 10k you need 4:00 per km (6:26 per mile). Full split table and pacing guidance.
+- [Sub-45 10K Pace and Splits](https://racepacepro.com/pace/sub-45-10k/): To run a sub-45 10k you need 4:30 per km (7:15 per mile). Full split table and pacing guidance.
+- [Sub-50 10K Pace and Splits](https://racepacepro.com/pace/sub-50-10k/): To run a sub-50 10k you need 5:00 per km (8:03 per mile). Full split table and pacing guidance.
+- [Sub-55 10K Pace and Splits](https://racepacepro.com/pace/sub-55-10k/): To run a sub-55 10k you need 5:30 per km (8:51 per mile). Full split table and pacing guidance.
+- [Sub-1](https://racepacepro.com/pace/sub-1-00-10k/): To run a sub-1:00 10k you need 6:00 per km (9:39 per mile). Full split table and pacing guidance.
+- [Sub-1](https://racepacepro.com/pace/sub-1-10-10k/): To run a sub-1:10 10k you need 7:00 per km (11:16 per mile). Full split table and pacing guidance.
+- [Sub-1](https://racepacepro.com/pace/sub-1-20-half-marathon/): To run a sub-1:20 half marathon you need 3:48 per km (6:06 per mile). Full split table and pacing guidance.
+- [Sub-1](https://racepacepro.com/pace/sub-1-30-half-marathon/): To run a sub-1:30 half marathon you need 4:16 per km (6:52 per mile). Full split table and pacing guidance.
+- [Sub-1](https://racepacepro.com/pace/sub-1-40-half-marathon/): To run a sub-1:40 half marathon you need 4:44 per km (7:38 per mile). Full split table and pacing guidance.
+- [Sub-1](https://racepacepro.com/pace/sub-1-45-half-marathon/): To run a sub-1:45 half marathon you need 4:59 per km (8:01 per mile). Full split table and pacing guidance.
+- [Sub-1](https://racepacepro.com/pace/sub-1-50-half-marathon/): To run a sub-1:50 half marathon you need 5:13 per km (8:23 per mile). Full split table and pacing guidance.
+- [Sub-2](https://racepacepro.com/pace/sub-2-00-half-marathon/): To run a sub-2:00 half marathon you need 5:41 per km (9:09 per mile). Full split table and pacing guidance.
+- [Sub-2](https://racepacepro.com/pace/sub-2-15-half-marathon/): To run a sub-2:15 half marathon you need 6:24 per km (10:18 per mile). Full split table and pacing guidance.
+- [Sub-2](https://racepacepro.com/pace/sub-2-30-half-marathon/): To run a sub-2:30 half marathon you need 7:07 per km (11:27 per mile). Full split table and pacing guidance.
+- [Sub-2](https://racepacepro.com/pace/sub-2-45-marathon/): To run a sub-2:45 marathon you need 3:55 per km (6:18 per mile). Full split table and pacing guidance.
+- [Sub-3](https://racepacepro.com/pace/sub-3-00-marathon/): To run a sub-3:00 marathon you need 4:16 per km (6:52 per mile). Full split table and pacing guidance.
+- [Sub-3](https://racepacepro.com/pace/sub-3-15-marathon/): To run a sub-3:15 marathon you need 4:37 per km (7:26 per mile). Full split table and pacing guidance.
+- [Sub-3](https://racepacepro.com/pace/sub-3-30-marathon/): To run a sub-3:30 marathon you need 4:59 per km (8:01 per mile). Full split table and pacing guidance.
+- [Sub-3](https://racepacepro.com/pace/sub-3-45-marathon/): To run a sub-3:45 marathon you need 5:20 per km (8:35 per mile). Full split table and pacing guidance.
+- [Sub-4](https://racepacepro.com/pace/sub-4-00-marathon/): To run a sub-4:00 marathon you need 5:41 per km (9:09 per mile). Full split table and pacing guidance.
+- [Sub-4](https://racepacepro.com/pace/sub-4-30-marathon/): To run a sub-4:30 marathon you need 6:24 per km (10:18 per mile). Full split table and pacing guidance.
+- [Sub-5](https://racepacepro.com/pace/sub-5-00-marathon/): To run a sub-5:00 marathon you need 7:07 per km (11:27 per mile). Full split table and pacing guidance.

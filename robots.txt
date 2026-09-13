@@ -3,3 +3,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://racepacepro.com/sitemap.xml
+
+# Structured index for agents that read markdown rather than crawl HTML.
+# https://racepacepro.com/llms.txt
