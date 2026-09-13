@@ -50,6 +50,64 @@
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
       }
     </script>
+
+    <!-- Mirrors the FAQ rendered by src/SiteContent.js; keep the two in step. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do I convert min/km to min/mile?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Multiply by 1.609. A 5:00/km pace is 8:03/mile; to go the other way, divide by 1.609. Switching units does this for you, and your finish time stays the same — the distance has not changed, only the units it is described in."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What do the pace zones mean?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "They are a rough guide to training intensity, from recovery jogging up to interval pace. Treat them loosely: real training zones are individual and are normally set from a recent race result or a threshold test, so the same pace can be easy for one runner and hard for another."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is a good 5K time?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It depends heavily on age, sex and training history, so treat any single number with suspicion. As rough orientation for adults: 30–35 minutes is a common first-timer result, under 25 minutes suggests consistent training, and under 20 minutes is competitive club standard. Beating your own previous time is a more useful measure than any table."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is a negative split?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Running the second half of a race faster than the first. Most personal bests are run this way and most blow-ups come from starting too fast, so it is a common strategy. The split table can show the pacing it implies for the same finish time."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does my actual race time not match the calculator?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The calculator assumes even effort on flat ground. Real races add hills, wind, heat, a congested start, and fatigue over distance — and GPS watches drift from the measured course. Treat the splits as a plan, not a promise."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Should I pace in kilometres or miles?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Use whichever your race is marked in. Running to kilometre splits on a course marked in miles is a reliable way to lose track of where you are late in a race, when the arithmetic gets hardest."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <noscript>

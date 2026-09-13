@@ -1,7 +1,10 @@
 import {
   KM_PER_MILE,
   POPULAR_DISTANCES_KM,
+  buildSplits,
   convertPace,
+  formatClock,
+  formatPace,
   joinTime,
   kmToUnit,
   paceFromTotalTime,
@@ -9,6 +12,7 @@ import {
   splitTime,
   totalTimeFromPace,
   unitToKm,
+  zoneForPace,
 } from './paceMath';
 
 describe('distance conversion', () => {
@@ -79,6 +83,77 @@ describe('pace and time are inverses', () => {
 
   test('a zero distance yields no pace rather than Infinity', () => {
     expect(paceFromTotalTime(1500, 0)).toBe(0);
+  });
+});
+
+describe('formatting', () => {
+  test('drops the hour field when under an hour', () => {
+    expect(formatClock(1500)).toBe('25:00');
+  });
+
+  test('shows hours when there are any', () => {
+    expect(formatClock(12659)).toBe('3:30:59');
+  });
+
+  test('pads pace seconds', () => {
+    expect(formatPace(303)).toBe('5:03');
+  });
+});
+
+describe('zoneForPace', () => {
+  test('classifies paces given in kilometres', () => {
+    expect(zoneForPace(200, 'km').id).toBe('interval');
+    expect(zoneForPace(270, 'km').id).toBe('threshold');
+    expect(zoneForPace(300, 'km').id).toBe('steady');
+    expect(zoneForPace(360, 'km').id).toBe('easy');
+    expect(zoneForPace(500, 'km').id).toBe('recovery');
+  });
+
+  test('converts a mile pace before classifying', () => {
+    // 8:03/mile is 5:00/km, which is steady — not the recovery pace the raw
+    // number would suggest against per-kilometre boundaries.
+    expect(zoneForPace(483, 'mi').id).toBe('steady');
+    expect(zoneForPace(483, 'km').id).toBe('recovery');
+  });
+
+  test('is undefined for a nonsense pace', () => {
+    expect(zoneForPace(0, 'km')).toBeNull();
+    expect(zoneForPace(NaN, 'km')).toBeNull();
+  });
+});
+
+describe('buildSplits', () => {
+  test('marks every unit plus the finish', () => {
+    const splits = buildSplits(5, 1500);
+    expect(splits.map((s) => s.distance)).toEqual([1, 2, 3, 4, 5]);
+    expect(splits.map((s) => s.seconds)).toEqual([300, 600, 900, 1200, 1500]);
+    expect(splits[4].isFinish).toBe(true);
+  });
+
+  test('includes a partial final split', () => {
+    const splits = buildSplits(42.195, 12658.5);
+    expect(splits[splits.length - 1].distance).toBe(42.195);
+    expect(splits[splits.length - 1].seconds).toBeCloseTo(12658.5, 6);
+  });
+
+  test('a negative split keeps the finish time but front-loads the effort', () => {
+    const total = 3000;
+    const splits = buildSplits(10, total, 0.02);
+    const finish = splits[splits.length - 1];
+    const halfway = splits.find((s) => s.distance === 5);
+
+    expect(finish.seconds).toBeCloseTo(total, 6);
+    expect(halfway.seconds).toBeGreaterThan(total / 2);
+  });
+
+  test('caps the row count so a huge distance cannot lock the page', () => {
+    expect(buildSplits(100000, 360000).length).toBeLessThanOrEqual(61);
+  });
+
+  test('returns nothing for a distance or time of zero', () => {
+    expect(buildSplits(0, 1500)).toEqual([]);
+    expect(buildSplits(5, 0)).toEqual([]);
+    expect(buildSplits(NaN, 1500)).toEqual([]);
   });
 });
 
