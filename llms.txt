@@ -16,10 +16,10 @@ Every figure on the site is computed from one shared maths module, so the calcul
 ## Pace charts
 
 - [All pace charts](https://racepacepro.com/pace/): Index of the four distance charts, each listing every common goal time with the pace it demands per kilometre and per mile.
-- [5K Pace Chart](https://racepacepro.com/pace/5k/): 5K pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
-- [10K Pace Chart](https://racepacepro.com/pace/10k/): 10K pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
-- [Half Marathon Pace Chart](https://racepacepro.com/pace/half-marathon/): Half Marathon pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
-- [Marathon Pace Chart](https://racepacepro.com/pace/marathon/): Marathon pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
+- [5K pace chart](https://racepacepro.com/pace/5k/): 5K pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
+- [10K pace chart](https://racepacepro.com/pace/10k/): 10K pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
+- [Half Marathon pace chart](https://racepacepro.com/pace/half-marathon/): Half Marathon pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
+- [Marathon pace chart](https://racepacepro.com/pace/marathon/): Marathon pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.
 
 ## Marathon pacing guides
 
@@ -55,33 +55,33 @@ Every figure on the site is computed from one shared maths module, so the calcul
 
 ## Optional
 
-- [Sub-15 5K Pace and Splits](https://racepacepro.com/pace/sub-15-5k/): To run a sub-15 5k you need 3:00 per km (4:50 per mile). Full split table and pacing guidance.
-- [Sub-18 5K Pace and Splits](https://racepacepro.com/pace/sub-18-5k/): To run a sub-18 5k you need 3:36 per km (5:48 per mile). Full split table and pacing guidance.
-- [Sub-20 5K Pace and Splits](https://racepacepro.com/pace/sub-20-5k/): To run a sub-20 5k you need 4:00 per km (6:26 per mile). Full split table and pacing guidance.
-- [Sub-22 5K Pace and Splits](https://racepacepro.com/pace/sub-22-5k/): To run a sub-22 5k you need 4:24 per km (7:05 per mile). Full split table and pacing guidance.
-- [Sub-25 5K Pace and Splits](https://racepacepro.com/pace/sub-25-5k/): To run a sub-25 5k you need 5:00 per km (8:03 per mile). Full split table and pacing guidance.
-- [Sub-30 5K Pace and Splits](https://racepacepro.com/pace/sub-30-5k/): To run a sub-30 5k you need 6:00 per km (9:39 per mile). Full split table and pacing guidance.
-- [Sub-35 5K Pace and Splits](https://racepacepro.com/pace/sub-35-5k/): To run a sub-35 5k you need 7:00 per km (11:16 per mile). Full split table and pacing guidance.
-- [Sub-35 10K Pace and Splits](https://racepacepro.com/pace/sub-35-10k/): To run a sub-35 10k you need 3:30 per km (5:38 per mile). Full split table and pacing guidance.
-- [Sub-40 10K Pace and Splits](https://racepacepro.com/pace/sub-40-10k/): To run a sub-40 10k you need 4:00 per km (6:26 per mile). Full split table and pacing guidance.
-- [Sub-45 10K Pace and Splits](https://racepacepro.com/pace/sub-45-10k/): To run a sub-45 10k you need 4:30 per km (7:15 per mile). Full split table and pacing guidance.
-- [Sub-50 10K Pace and Splits](https://racepacepro.com/pace/sub-50-10k/): To run a sub-50 10k you need 5:00 per km (8:03 per mile). Full split table and pacing guidance.
-- [Sub-55 10K Pace and Splits](https://racepacepro.com/pace/sub-55-10k/): To run a sub-55 10k you need 5:30 per km (8:51 per mile). Full split table and pacing guidance.
-- [Sub-1](https://racepacepro.com/pace/sub-1-00-10k/): To run a sub-1:00 10k you need 6:00 per km (9:39 per mile). Full split table and pacing guidance.
-- [Sub-1](https://racepacepro.com/pace/sub-1-10-10k/): To run a sub-1:10 10k you need 7:00 per km (11:16 per mile). Full split table and pacing guidance.
-- [Sub-1](https://racepacepro.com/pace/sub-1-20-half-marathon/): To run a sub-1:20 half marathon you need 3:48 per km (6:06 per mile). Full split table and pacing guidance.
-- [Sub-1](https://racepacepro.com/pace/sub-1-30-half-marathon/): To run a sub-1:30 half marathon you need 4:16 per km (6:52 per mile). Full split table and pacing guidance.
-- [Sub-1](https://racepacepro.com/pace/sub-1-40-half-marathon/): To run a sub-1:40 half marathon you need 4:44 per km (7:38 per mile). Full split table and pacing guidance.
-- [Sub-1](https://racepacepro.com/pace/sub-1-45-half-marathon/): To run a sub-1:45 half marathon you need 4:59 per km (8:01 per mile). Full split table and pacing guidance.
-- [Sub-1](https://racepacepro.com/pace/sub-1-50-half-marathon/): To run a sub-1:50 half marathon you need 5:13 per km (8:23 per mile). Full split table and pacing guidance.
-- [Sub-2](https://racepacepro.com/pace/sub-2-00-half-marathon/): To run a sub-2:00 half marathon you need 5:41 per km (9:09 per mile). Full split table and pacing guidance.
-- [Sub-2](https://racepacepro.com/pace/sub-2-15-half-marathon/): To run a sub-2:15 half marathon you need 6:24 per km (10:18 per mile). Full split table and pacing guidance.
-- [Sub-2](https://racepacepro.com/pace/sub-2-30-half-marathon/): To run a sub-2:30 half marathon you need 7:07 per km (11:27 per mile). Full split table and pacing guidance.
-- [Sub-2](https://racepacepro.com/pace/sub-2-45-marathon/): To run a sub-2:45 marathon you need 3:55 per km (6:18 per mile). Full split table and pacing guidance.
-- [Sub-3](https://racepacepro.com/pace/sub-3-00-marathon/): To run a sub-3:00 marathon you need 4:16 per km (6:52 per mile). Full split table and pacing guidance.
-- [Sub-3](https://racepacepro.com/pace/sub-3-15-marathon/): To run a sub-3:15 marathon you need 4:37 per km (7:26 per mile). Full split table and pacing guidance.
-- [Sub-3](https://racepacepro.com/pace/sub-3-30-marathon/): To run a sub-3:30 marathon you need 4:59 per km (8:01 per mile). Full split table and pacing guidance.
-- [Sub-3](https://racepacepro.com/pace/sub-3-45-marathon/): To run a sub-3:45 marathon you need 5:20 per km (8:35 per mile). Full split table and pacing guidance.
-- [Sub-4](https://racepacepro.com/pace/sub-4-00-marathon/): To run a sub-4:00 marathon you need 5:41 per km (9:09 per mile). Full split table and pacing guidance.
-- [Sub-4](https://racepacepro.com/pace/sub-4-30-marathon/): To run a sub-4:30 marathon you need 6:24 per km (10:18 per mile). Full split table and pacing guidance.
-- [Sub-5](https://racepacepro.com/pace/sub-5-00-marathon/): To run a sub-5:00 marathon you need 7:07 per km (11:27 per mile). Full split table and pacing guidance.
+- [Sub-15 5K pace](https://racepacepro.com/pace/sub-15-5k/): To run a sub-15 5k you need 3:00 per km (4:50 per mile). Full split table and pacing guidance.
+- [Sub-18 5K pace](https://racepacepro.com/pace/sub-18-5k/): To run a sub-18 5k you need 3:36 per km (5:48 per mile). Full split table and pacing guidance.
+- [Sub-20 5K pace](https://racepacepro.com/pace/sub-20-5k/): To run a sub-20 5k you need 4:00 per km (6:26 per mile). Full split table and pacing guidance.
+- [Sub-22 5K pace](https://racepacepro.com/pace/sub-22-5k/): To run a sub-22 5k you need 4:24 per km (7:05 per mile). Full split table and pacing guidance.
+- [Sub-25 5K pace](https://racepacepro.com/pace/sub-25-5k/): To run a sub-25 5k you need 5:00 per km (8:03 per mile). Full split table and pacing guidance.
+- [Sub-30 5K pace](https://racepacepro.com/pace/sub-30-5k/): To run a sub-30 5k you need 6:00 per km (9:39 per mile). Full split table and pacing guidance.
+- [Sub-35 5K pace](https://racepacepro.com/pace/sub-35-5k/): To run a sub-35 5k you need 7:00 per km (11:16 per mile). Full split table and pacing guidance.
+- [Sub-35 10K pace](https://racepacepro.com/pace/sub-35-10k/): To run a sub-35 10k you need 3:30 per km (5:38 per mile). Full split table and pacing guidance.
+- [Sub-40 10K pace](https://racepacepro.com/pace/sub-40-10k/): To run a sub-40 10k you need 4:00 per km (6:26 per mile). Full split table and pacing guidance.
+- [Sub-45 10K pace](https://racepacepro.com/pace/sub-45-10k/): To run a sub-45 10k you need 4:30 per km (7:15 per mile). Full split table and pacing guidance.
+- [Sub-50 10K pace](https://racepacepro.com/pace/sub-50-10k/): To run a sub-50 10k you need 5:00 per km (8:03 per mile). Full split table and pacing guidance.
+- [Sub-55 10K pace](https://racepacepro.com/pace/sub-55-10k/): To run a sub-55 10k you need 5:30 per km (8:51 per mile). Full split table and pacing guidance.
+- [Sub-1:00 10K pace](https://racepacepro.com/pace/sub-1-00-10k/): To run a sub-1:00 10k you need 6:00 per km (9:39 per mile). Full split table and pacing guidance.
+- [Sub-1:10 10K pace](https://racepacepro.com/pace/sub-1-10-10k/): To run a sub-1:10 10k you need 7:00 per km (11:16 per mile). Full split table and pacing guidance.
+- [Sub-1:20 Half Marathon pace](https://racepacepro.com/pace/sub-1-20-half-marathon/): To run a sub-1:20 half marathon you need 3:48 per km (6:06 per mile). Full split table and pacing guidance.
+- [Sub-1:30 Half Marathon pace](https://racepacepro.com/pace/sub-1-30-half-marathon/): To run a sub-1:30 half marathon you need 4:16 per km (6:52 per mile). Full split table and pacing guidance.
+- [Sub-1:40 Half Marathon pace](https://racepacepro.com/pace/sub-1-40-half-marathon/): To run a sub-1:40 half marathon you need 4:44 per km (7:38 per mile). Full split table and pacing guidance.
+- [Sub-1:45 Half Marathon pace](https://racepacepro.com/pace/sub-1-45-half-marathon/): To run a sub-1:45 half marathon you need 4:59 per km (8:01 per mile). Full split table and pacing guidance.
+- [Sub-1:50 Half Marathon pace](https://racepacepro.com/pace/sub-1-50-half-marathon/): To run a sub-1:50 half marathon you need 5:13 per km (8:23 per mile). Full split table and pacing guidance.
+- [Sub-2:00 Half Marathon pace](https://racepacepro.com/pace/sub-2-00-half-marathon/): To run a sub-2:00 half marathon you need 5:41 per km (9:09 per mile). Full split table and pacing guidance.
+- [Sub-2:15 Half Marathon pace](https://racepacepro.com/pace/sub-2-15-half-marathon/): To run a sub-2:15 half marathon you need 6:24 per km (10:18 per mile). Full split table and pacing guidance.
+- [Sub-2:30 Half Marathon pace](https://racepacepro.com/pace/sub-2-30-half-marathon/): To run a sub-2:30 half marathon you need 7:07 per km (11:27 per mile). Full split table and pacing guidance.
+- [Sub-2:45 Marathon pace](https://racepacepro.com/pace/sub-2-45-marathon/): To run a sub-2:45 marathon you need 3:55 per km (6:18 per mile). Full split table and pacing guidance.
+- [Sub-3:00 Marathon pace](https://racepacepro.com/pace/sub-3-00-marathon/): To run a sub-3:00 marathon you need 4:16 per km (6:52 per mile). Full split table and pacing guidance.
+- [Sub-3:15 Marathon pace](https://racepacepro.com/pace/sub-3-15-marathon/): To run a sub-3:15 marathon you need 4:37 per km (7:26 per mile). Full split table and pacing guidance.
+- [Sub-3:30 Marathon pace](https://racepacepro.com/pace/sub-3-30-marathon/): To run a sub-3:30 marathon you need 4:59 per km (8:01 per mile). Full split table and pacing guidance.
+- [Sub-3:45 Marathon pace](https://racepacepro.com/pace/sub-3-45-marathon/): To run a sub-3:45 marathon you need 5:20 per km (8:35 per mile). Full split table and pacing guidance.
+- [Sub-4:00 Marathon pace](https://racepacepro.com/pace/sub-4-00-marathon/): To run a sub-4:00 marathon you need 5:41 per km (9:09 per mile). Full split table and pacing guidance.
+- [Sub-4:30 Marathon pace](https://racepacepro.com/pace/sub-4-30-marathon/): To run a sub-4:30 marathon you need 6:24 per km (10:18 per mile). Full split table and pacing guidance.
+- [Sub-5:00 Marathon pace](https://racepacepro.com/pace/sub-5-00-marathon/): To run a sub-5:00 marathon you need 7:07 per km (11:27 per mile). Full split table and pacing guidance.
