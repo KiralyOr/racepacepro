@@ -28,3 +28,5 @@ Two targets fire on a push to `main`:
 - Vercel is connected to the repo and promotes a production deploy, served at a domain **root**.
 
 `homepage` in `package.json` is `"."` so CRA emits relative asset paths, which resolve under both. Do not set it back to an absolute URL: that hardcodes a `/racepacepro/` prefix onto every script and stylesheet, which resolves on GitHub Pages but 404s on Vercel and renders a blank page. The app has no client-side routing, so relative paths carry no downside here.
+
+`racepacepro.com` is registered at GoDaddy and points at Vercel. DNS records, Search Console setup, and the pending manual account steps live in `docs/operations.md`.
