@@ -43,6 +43,7 @@ const { formatClock, formatPace } = loadModule(path.join(ROOT, 'src/paceMath.js'
 const { RACES, SITE_ORIGIN, allPages, hubPage } = loadModule(path.join(ROOT, 'src/pageData.js'));
 const { ARTICLES } = loadModule(path.join(ROOT, 'src/articles.js'));
 const { MARATHONS } = loadModule(path.join(ROOT, 'src/marathons.js'));
+const { ABOUT, FAQ } = loadModule(path.join(ROOT, 'src/homeContent.js'));
 
 // Relative rather than absolute so pages work wherever the site is served
 // from, including a subpath such as the GitHub Pages copy. The depth varies:
@@ -377,6 +378,113 @@ left to the official sites, which are linked from every page.</p>
   <p><a class="cta" href="${REL}">Open the calculator</a></p>
 </div>`;
 
+// The home page is the React app, so everything React draws is invisible to a
+// crawler that does not run JavaScript. These sections are written into the
+// built index.html as plain HTML instead. Links are relative with no leading
+// slash so they resolve from a domain root and from a subpath alike.
+const CARD = 'rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6';
+const H2 = 'text-base font-semibold text-slate-900';
+const PARA = 'mt-2 text-sm leading-relaxed text-slate-600';
+
+const homeStaticHtml = () => `
+<div class="mt-4 space-y-4">
+  <section class="${CARD}">
+    <h2 class="${H2}">About this calculator</h2>
+    ${ABOUT.map((para) => `<p class="${PARA}">${esc(para)}</p>`).join('')}
+  </section>
+
+  <section class="${CARD}">
+    <h2 class="${H2}">Pacing specific marathons</h2>
+    <p class="${PARA}">What each course does to your splits. Berlin and Valencia let you hold one
+    pace, Boston punishes you for it, and New York asks for uneven splits by design.</p>
+    <div class="mt-3 flex flex-wrap gap-2">
+      ${MARATHONS.map(
+        (race) =>
+          `<a href="marathons/${race.id}/" class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">${esc(
+            race.name
+          )}</a>`
+      ).join('')}
+    </div>
+    <p class="mt-3 text-sm"><a href="marathons/" class="font-medium text-blue-700 hover:underline">All marathon pacing guides</a></p>
+  </section>
+
+  <section class="${CARD}">
+    <h2 class="${H2}">Guides</h2>
+    <ul class="mt-3 divide-y divide-slate-100">
+      ${ARTICLES.map(
+        (article) => `<li class="py-3 first:pt-0 last:pb-0">
+        <a href="${article.slug}/" class="text-sm font-medium text-blue-700 hover:underline">${esc(
+          article.title
+        )}</a>
+        <p class="mt-1 text-sm leading-relaxed text-slate-600">${esc(article.description)}</p>
+      </li>`
+      ).join('')}
+    </ul>
+  </section>
+
+  <section class="${CARD}">
+    <h2 class="${H2}">Race pace charts</h2>
+    <p class="${PARA}">Every common goal time for each distance, with the pace it demands and a
+    full split table.</p>
+    <div class="mt-3 flex flex-wrap gap-2">
+      ${RACES.map(
+        (race) =>
+          `<a href="pace/${race.id}/" class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">${esc(
+            race.name
+          )}</a>`
+      ).join('')}
+    </div>
+  </section>
+
+  <section class="${CARD}">
+    <h2 class="${H2}">Frequently asked questions</h2>
+    <dl class="mt-3 divide-y divide-slate-100">
+      ${FAQ.map(
+        (item) => `<div class="py-3 first:pt-0 last:pb-0">
+        <dt class="text-sm font-medium text-slate-900">${esc(item.question)}</dt>
+        <dd class="mt-1 text-sm leading-relaxed text-slate-600">${esc(item.answer)}</dd>
+      </div>`
+      ).join('')}
+    </dl>
+  </section>
+</div>`;
+
+// Derived from the same array the page renders, so the schema cannot describe
+// questions the page does not show.
+const faqSchemaHtml = () =>
+  `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  })}</script>`;
+
+const injectHomeContent = () => {
+  const file = path.join(BUILD, 'index.html');
+  let html = fs.readFileSync(file, 'utf8');
+
+  // Anchored to real markup rather than HTML comments: the production build
+  // minifies index.html and strips comments, so comment markers never survive.
+  const ROOT_DIV = '<div id="root"></div>';
+  const HEAD_END = '</head>';
+
+  // Fail loudly. Silently dropping this would leave the most important page on
+  // the site serving a crawler nothing but an empty div.
+  [ROOT_DIV, HEAD_END].forEach((anchor) => {
+    if (!html.includes(anchor)) {
+      console.error(`generate-pages: anchor ${anchor} missing from build/index.html`);
+      process.exit(1);
+    }
+  });
+
+  html = html.replace(ROOT_DIV, ROOT_DIV + homeStaticHtml());
+  html = html.replace(HEAD_END, faqSchemaHtml() + HEAD_END);
+  fs.writeFileSync(file, html);
+};
+
 const write = (slug, html) => {
   const dir = path.join(BUILD, slug);
   fs.mkdirSync(dir, { recursive: true });
@@ -464,6 +572,8 @@ const main = () => {
       })
     );
   });
+
+  injectHomeContent();
 
   const urls = [
     '',
