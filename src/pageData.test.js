@@ -126,7 +126,8 @@ describe('house style', () => {
   const path = require('path');
   const dir = path.join(__dirname, '..');
   const files = [
-    'src/articles.js', 'src/pageData.js', 'src/SiteContent.js', 'src/App.js',
+    'src/articles.js', 'src/marathons.js', 'src/trainingPlan.js', 'src/TrainingStart.js',
+    'src/pageData.js', 'src/SiteContent.js', 'src/App.js',
     'src/paceMath.js', 'src/urlState.js', 'src/PaceCalculator.js', 'src/zoneStyles.js',
     'scripts/generate-pages.js', 'public/index.html', 'public/manifest.json',
     'CLAUDE.md', 'docs/operations.md', 'README.md',

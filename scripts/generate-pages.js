@@ -42,11 +42,13 @@ const loadModule = (request) => {
 const { formatClock, formatPace } = loadModule(path.join(ROOT, 'src/paceMath.js'));
 const { RACES, SITE_ORIGIN, allPages, hubPage } = loadModule(path.join(ROOT, 'src/pageData.js'));
 const { ARTICLES } = loadModule(path.join(ROOT, 'src/articles.js'));
+const { MARATHONS } = loadModule(path.join(ROOT, 'src/marathons.js'));
+const { ABOUT, FAQ } = loadModule(path.join(ROOT, 'src/homeContent.js'));
 
-// Every generated page sits at pace/<slug>/index.html, so one relative prefix
-// reaches the site root from all of them. Absolute paths would break wherever
-// the site is served from a subpath, such as the GitHub Pages copy.
-const REL = '../../';
+// Relative rather than absolute so pages work wherever the site is served
+// from, including a subpath such as the GitHub Pages copy. The depth varies:
+// pace/<slug>/ is two levels down, marathons/ is one.
+const relFor = (slug) => '../'.repeat(slug.split('/').length);
 
 const esc = (value) =>
   String(value).replace(/[&<>"']/g, (c) =>
@@ -108,6 +110,7 @@ const ZONE_COLOUR = {
 };
 
 const layout = ({ slug, title, description, crumbs, body, extraSchema }) => {
+  const REL = relFor(slug);
   const url = `${SITE_ORIGIN}/${slug}/`;
   const breadcrumb = {
     '@context': 'https://schema.org',
@@ -172,7 +175,7 @@ ${splits
   .join('')}
 </tbody></table>`;
 
-const goalBody = (page, siblings) => {
+const goalBody = (page, siblings, REL) => {
   const [bg, fg] = ZONE_COLOUR[page.zone.id];
   return `
 <h1>${esc(page.heading)}</h1>
@@ -220,7 +223,7 @@ or ${formatPace(page.perMile)} per mile, for the full ${page.race.km} km.</p>
 </div>`;
 };
 
-const hubBody = (page) => `
+const hubBody = (page, REL) => `
 <h1>${esc(page.heading)}</h1>
 <p>The pace required for every common ${esc(
   page.race.name.toLowerCase()
@@ -267,7 +270,7 @@ Pick a target for its full split table.</p>
   </div>
 </div>`;
 
-const articleBody = (article) => `
+const articleBody = (article, REL) => `
 <h1>${esc(article.heading)}</h1>
 <p class="lede">${esc(article.intro)}</p>
 ${article.sections
@@ -289,6 +292,198 @@ ${article.sections
     ${RACES.map((r) => `<a href="${REL}pace/${r.id}/">${esc(r.name)} paces</a>`).join('')}
   </div>
 </div>`;
+
+const MARATHON_KM = 42.195;
+const REFERENCE_GOALS = [10800, 12600, 14400, 16200];
+
+const marathonBody = (race, REL) => `
+<h1>Pacing the ${esc(race.name)}</h1>
+<p class="lede">${esc(race.summary)}</p>
+
+<div class="card">
+  <table>
+    <tbody>
+      <tr><td><strong>Where</strong></td><td class="r">${esc(race.city)}, ${esc(race.country)}</td></tr>
+      <tr><td><strong>Usually held</strong></td><td class="r">${esc(race.month)}</td></tr>
+      <tr><td><strong>Course</strong></td><td class="r">${esc(race.profile)}</td></tr>
+      <tr><td><strong>Official site</strong></td><td class="r"><a href="${esc(
+        race.officialUrl
+      )}" rel="noopener nofollow" target="_blank">Dates and entry</a></td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:12px;font-size:13px;color:#64748b">Dates, ballots and entry rules change
+  every year and are not listed here. Check the official site.</p>
+</div>
+
+<div class="card">
+  <h2>How to pace it</h2>
+  ${race.pacing.map((para) => `<p>${esc(para)}</p>`).join('')}
+</div>
+
+<div class="card">
+  <h2>Worth knowing</h2>
+  <ul>${race.watchFor.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>
+</div>
+
+<div class="card">
+  <h2>What the common targets ask for</h2>
+  <table>
+    <thead><tr><th>Finish</th><th class="r">Per km</th><th class="r">Per mile</th></tr></thead>
+    <tbody>
+      ${REFERENCE_GOALS.map((seconds) => {
+        const perKm = seconds / MARATHON_KM;
+        const perMile = seconds / (MARATHON_KM / 1.609344);
+        return `<tr><td>${formatClock(seconds)}</td><td class="r">${formatPace(
+          perKm
+        )}</td><td class="r">${formatPace(perMile)}</td></tr>`;
+      }).join('')}
+    </tbody>
+  </table>
+  <p style="margin-top:12px"><a href="${REL}pace/marathon/">Every marathon target and its full split table</a></p>
+  <p><a class="cta" href="${REL}?d=marathon&u=km&m=time&t=12600">Open the calculator</a></p>
+</div>
+
+<div class="card">
+  <h2>Other marathons</h2>
+  <div class="links">
+    ${MARATHONS.filter((other) => other.id !== race.id)
+      .map((other) => `<a href="${REL}marathons/${other.id}/">${esc(other.name)}</a>`)
+      .join('')}
+  </div>
+</div>`;
+
+const marathonIndexBody = (REL) => `
+<h1>Marathon pacing guides</h1>
+<p class="lede">What each course does to your splits, and how to plan for it. Dates and entry are
+left to the official sites, which are linked from every page.</p>
+
+<div class="card">
+  <table>
+    <thead><tr><th>Race</th><th>Month</th><th>Course</th></tr></thead>
+    <tbody>
+      ${MARATHONS.map(
+        (race) => `<tr>
+        <td><a href="${REL}marathons/${race.id}/">${esc(race.name)}</a></td>
+        <td>${esc(race.month)}</td>
+        <td>${esc(race.profile)}</td>
+      </tr>`
+      ).join('')}
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Work out your own target</h2>
+  <p>Any distance, any pace, with split times and negative split pacing.</p>
+  <p><a class="cta" href="${REL}">Open the calculator</a></p>
+</div>`;
+
+// The home page is the React app, so everything React draws is invisible to a
+// crawler that does not run JavaScript. These sections are written into the
+// built index.html as plain HTML instead. Links are relative with no leading
+// slash so they resolve from a domain root and from a subpath alike.
+const CARD = 'rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6';
+const H2 = 'text-base font-semibold text-slate-900';
+const PARA = 'mt-2 text-sm leading-relaxed text-slate-600';
+
+const homeStaticHtml = () => `
+<div class="mt-4 space-y-4">
+  <section class="${CARD}">
+    <h2 class="${H2}">About this calculator</h2>
+    ${ABOUT.map((para) => `<p class="${PARA}">${esc(para)}</p>`).join('')}
+  </section>
+
+  <section class="${CARD}">
+    <h2 class="${H2}">Pacing specific marathons</h2>
+    <p class="${PARA}">What each course does to your splits. Berlin and Valencia let you hold one
+    pace, Boston punishes you for it, and New York asks for uneven splits by design.</p>
+    <div class="mt-3 flex flex-wrap gap-2">
+      ${MARATHONS.map(
+        (race) =>
+          `<a href="marathons/${race.id}/" class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">${esc(
+            race.name
+          )}</a>`
+      ).join('')}
+    </div>
+    <p class="mt-3 text-sm"><a href="marathons/" class="font-medium text-blue-700 hover:underline">All marathon pacing guides</a></p>
+  </section>
+
+  <section class="${CARD}">
+    <h2 class="${H2}">Guides</h2>
+    <ul class="mt-3 divide-y divide-slate-100">
+      ${ARTICLES.map(
+        (article) => `<li class="py-3 first:pt-0 last:pb-0">
+        <a href="${article.slug}/" class="text-sm font-medium text-blue-700 hover:underline">${esc(
+          article.title
+        )}</a>
+        <p class="mt-1 text-sm leading-relaxed text-slate-600">${esc(article.description)}</p>
+      </li>`
+      ).join('')}
+    </ul>
+  </section>
+
+  <section class="${CARD}">
+    <h2 class="${H2}">Race pace charts</h2>
+    <p class="${PARA}">Every common goal time for each distance, with the pace it demands and a
+    full split table.</p>
+    <div class="mt-3 flex flex-wrap gap-2">
+      ${RACES.map(
+        (race) =>
+          `<a href="pace/${race.id}/" class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">${esc(
+            race.name
+          )}</a>`
+      ).join('')}
+    </div>
+  </section>
+
+  <section class="${CARD}">
+    <h2 class="${H2}">Frequently asked questions</h2>
+    <dl class="mt-3 divide-y divide-slate-100">
+      ${FAQ.map(
+        (item) => `<div class="py-3 first:pt-0 last:pb-0">
+        <dt class="text-sm font-medium text-slate-900">${esc(item.question)}</dt>
+        <dd class="mt-1 text-sm leading-relaxed text-slate-600">${esc(item.answer)}</dd>
+      </div>`
+      ).join('')}
+    </dl>
+  </section>
+</div>`;
+
+// Derived from the same array the page renders, so the schema cannot describe
+// questions the page does not show.
+const faqSchemaHtml = () =>
+  `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  })}</script>`;
+
+const injectHomeContent = () => {
+  const file = path.join(BUILD, 'index.html');
+  let html = fs.readFileSync(file, 'utf8');
+
+  // Anchored to real markup rather than HTML comments: the production build
+  // minifies index.html and strips comments, so comment markers never survive.
+  const ROOT_DIV = '<div id="root"></div>';
+  const HEAD_END = '</head>';
+
+  // Fail loudly. Silently dropping this would leave the most important page on
+  // the site serving a crawler nothing but an empty div.
+  [ROOT_DIV, HEAD_END].forEach((anchor) => {
+    if (!html.includes(anchor)) {
+      console.error(`generate-pages: anchor ${anchor} missing from build/index.html`);
+      process.exit(1);
+    }
+  });
+
+  html = html.replace(ROOT_DIV, ROOT_DIV + homeStaticHtml());
+  html = html.replace(HEAD_END, faqSchemaHtml() + HEAD_END);
+  fs.writeFileSync(file, html);
+};
 
 const write = (slug, html) => {
   const dir = path.join(BUILD, slug);
@@ -316,9 +511,10 @@ const main = () => {
       page.type === 'goal'
         ? goalBody(
             page,
-            goalsByRace[page.race.id].filter((g) => g.totalSeconds !== page.totalSeconds)
+            goalsByRace[page.race.id].filter((g) => g.totalSeconds !== page.totalSeconds),
+            relFor(page.slug)
           )
-        : hubBody(page);
+        : hubBody(page, relFor(page.slug));
 
     write(page.slug, layout({ ...page, crumbs, body }));
   });
@@ -332,7 +528,7 @@ const main = () => {
           { name: 'Home', href: '/' },
           { name: article.title, href: `/${article.slug}/` },
         ],
-        body: articleBody(article),
+        body: articleBody(article, relFor(article.slug)),
         extraSchema: {
           '@context': 'https://schema.org',
           '@type': 'Article',
@@ -346,7 +542,46 @@ const main = () => {
     );
   });
 
-  const urls = ['', ...pages.map((p) => `${p.slug}/`), ...ARTICLES.map((a) => `${a.slug}/`)];
+  write(
+    'marathons',
+    layout({
+      slug: 'marathons',
+      title: 'Marathon Pacing Guides by Race',
+      description:
+        'Pacing guides for major marathons, covering what each course does to your splits and how to plan for it.',
+      crumbs: [{ name: 'Home', href: '/' }, { name: 'Marathons', href: '/marathons/' }],
+      body: marathonIndexBody(relFor('marathons')),
+    })
+  );
+
+  MARATHONS.forEach((race) => {
+    write(
+      `marathons/${race.id}`,
+      layout({
+        slug: `marathons/${race.id}`,
+        title: `${race.name} Pacing Guide`,
+        description: `How to pace the ${race.name}: ${race.profile.toLowerCase()} course in ${
+          race.city
+        }, what to expect on the day, and the splits for common goal times.`,
+        crumbs: [
+          { name: 'Home', href: '/' },
+          { name: 'Marathons', href: '/marathons/' },
+          { name: race.name, href: `/marathons/${race.id}/` },
+        ],
+        body: marathonBody(race, relFor(`marathons/${race.id}`)),
+      })
+    );
+  });
+
+  injectHomeContent();
+
+  const urls = [
+    '',
+    ...pages.map((p) => `${p.slug}/`),
+    ...ARTICLES.map((a) => `${a.slug}/`),
+    'marathons/',
+    ...MARATHONS.map((race) => `marathons/${race.id}/`),
+  ];
   fs.writeFileSync(
     path.join(BUILD, 'sitemap.xml'),
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -363,7 +598,7 @@ ${urls
 `
   );
 
-  console.log(`generate-pages: wrote ${pages.length + ARTICLES.length} pages and a sitemap with ${urls.length} URLs`);
+  console.log(`generate-pages: wrote ${pages.length + ARTICLES.length + MARATHONS.length + 1} pages and a sitemap with ${urls.length} URLs`);
 };
 
 main();
