@@ -30,8 +30,16 @@ describe('calculating', () => {
     fireEvent.click(screen.getByRole('radio', { name: 'Miles' }));
 
     expect(finishTime()).toContain('25:00');
-    expect(screen.getByLabelText('min')).toHaveValue(8);
-    expect(screen.getByLabelText('sec')).toHaveValue(3);
+    // Selects report their value as a string.
+    expect(screen.getByLabelText('min')).toHaveValue('8');
+    expect(screen.getByLabelText('sec')).toHaveValue('3');
+  });
+
+  test('pace minutes cover the range a unit conversion can produce', () => {
+    render(<PaceCalculator />);
+    const options = Array.from(screen.getByLabelText('min').options).map((o) => o.value);
+    expect(options).toContain('0');
+    expect(options).toContain('59');
   });
 
   test('derives the pace from an edited goal time', () => {

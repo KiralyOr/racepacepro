@@ -42,19 +42,36 @@ const Segmented = ({ label, options, value, onChange }) => (
   </div>
 );
 
-const NumberField = ({ label, value, onChange, max }) => (
+const range = (from, to) => Array.from({ length: to - from + 1 }, (_, i) => from + i);
+
+// Full 0-59 for minutes rather than a realistic running range: converting a
+// slow pace to miles can push it higher than expected, and a value outside the
+// option list would leave the select showing nothing.
+const MINUTES = range(0, 59);
+const SECONDS = range(0, 59);
+const HOURS = range(0, 23);
+
+// A native select is deliberate: iOS renders it as a scroll wheel, which is
+// far easier than typing on a phone, while desktop gets a normal dropdown.
+const TimeSelect = ({ label, value, options, onChange, pad }) => (
   <label className="flex flex-1 flex-col gap-1">
     <span className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</span>
-    <input
-      type="number"
-      inputMode="numeric"
-      min="0"
-      max={max}
+    <select
       value={value}
-      onChange={(e) => onChange(Math.max(0, parseInt(e.target.value, 10) || 0))}
+      onChange={(e) => onChange(Number(e.target.value))}
       aria-label={label}
-      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-lg tabular-nums text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-    />
+      className="w-full appearance-none rounded-lg border border-slate-200 bg-white bg-[length:1rem] bg-[right_0.6rem_center] bg-no-repeat py-2 pl-3 pr-8 text-lg tabular-nums text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+      style={{
+        backgroundImage:
+          "url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2364748b' stroke-width='1.5'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E\")",
+      }}
+    >
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {pad ? String(option).padStart(2, '0') : option}
+        </option>
+      ))}
+    </select>
   </label>
 );
 
@@ -210,41 +227,44 @@ const PaceCalculator = () => {
             </div>
             {showingTime ? (
               <div className="flex gap-2">
-                <NumberField
+                <TimeSelect
                   label="min"
+                  options={MINUTES}
                   value={pace.minutes}
                   onChange={(value) => patch({ paceSeconds: value * 60 + pace.seconds })}
                 />
-                <NumberField
+                <TimeSelect
                   label="sec"
-                  max="59"
+                  options={SECONDS}
+                  pad
                   value={pace.seconds}
-                  onChange={(value) =>
-                    patch({ paceSeconds: pace.minutes * 60 + Math.min(59, value) })
-                  }
+                  onChange={(value) => patch({ paceSeconds: pace.minutes * 60 + value })}
                 />
               </div>
             ) : (
               <div className="flex gap-2">
-                <NumberField
+                <TimeSelect
                   label="hr"
+                  options={HOURS}
                   value={time.hours}
                   onChange={(value) => patch({ totalSeconds: joinTime({ ...time, hours: value }) })}
                 />
-                <NumberField
+                <TimeSelect
                   label="min"
-                  max="59"
+                  options={MINUTES}
+                  pad
                   value={time.minutes}
                   onChange={(value) =>
-                    patch({ totalSeconds: joinTime({ ...time, minutes: Math.min(59, value) }) })
+                    patch({ totalSeconds: joinTime({ ...time, minutes: value }) })
                   }
                 />
-                <NumberField
+                <TimeSelect
                   label="sec"
-                  max="59"
+                  options={SECONDS}
+                  pad
                   value={time.seconds}
                   onChange={(value) =>
-                    patch({ totalSeconds: joinTime({ ...time, seconds: Math.min(59, value) }) })
+                    patch({ totalSeconds: joinTime({ ...time, seconds: value }) })
                   }
                 />
               </div>
