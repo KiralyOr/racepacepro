@@ -9,7 +9,7 @@ A simple React application that calculates running pace and time for various dis
 
 ## Live Demo
 
-View the live application at: https://[your-github-username].github.io/running-pace-calculator/
+View the live application at: https://kiralyor.github.io/racepacepro/
 
 ## Features
 
@@ -25,12 +25,12 @@ View the live application at: https://[your-github-username].github.io/running-p
 
 1. Clone the repository:
    ```
-   git clone https://github.com/[your-github-username]/running-pace-calculator.git
+   git clone https://github.com/KiralyOr/racepacepro.git
    ```
 
 2. Navigate to project directory:
    ```
-   cd running-pace-calculator
+   cd racepacepro
    ```
 
 3. Install dependencies:
@@ -47,12 +47,11 @@ View the live application at: https://[your-github-username].github.io/running-p
 
 ### GitHub Pages Deployment
 
-1. Update the `homepage` field in `package.json` with your GitHub username:
-   ```json
-   "homepage": "https://[your-github-username].github.io/running-pace-calculator"
-   ```
+The `homepage` field in `package.json` is `"."`, so the build emits relative asset paths and works
+both at a subpath (GitHub Pages) and at a domain root (Vercel). Changing it to an absolute URL will
+break whichever target isn't served from that exact path.
 
-2. Deploy to GitHub Pages:
+1. Deploy to GitHub Pages:
    ```
    npm run deploy
    ```
