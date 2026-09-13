@@ -1,4 +1,4 @@
-import { SPLIT_STRATEGIES } from './paceMath';
+import { SPLIT_STRATEGIES, unitToKm } from './paceMath';
 
 const STORAGE_KEY = 'racepacepro:last';
 
@@ -14,7 +14,12 @@ const KEY_BY_SLUG = Object.fromEntries(
 
 export const DEFAULT_STATE = {
   selectedKey: '5K',
+  // customValue is what the field shows, in the unit on screen; customKm is the
+  // same distance in kilometres and is the value a unit switch converts from.
+  // Deriving the display from the rounded display would compound error on every
+  // switch (10 km -> 6.21 mi -> 9.99 km).
   customValue: '5',
+  customKm: 5,
   unit: 'km',
   mode: 'timeFromPace',
   paceSeconds: 300,
@@ -51,7 +56,9 @@ export const decodeState = (search) => {
   const params = new URLSearchParams(search || '');
   if (Array.from(params.keys()).length === 0) return null;
 
-  let { selectedKey, customValue } = DEFAULT_STATE;
+  const unit = params.get('u') === 'mi' ? 'mi' : 'km';
+
+  let { selectedKey, customValue, customKm } = DEFAULT_STATE;
   const distance = params.get('d');
   if (distance && KEY_BY_SLUG[distance]) {
     selectedKey = KEY_BY_SLUG[distance];
@@ -60,6 +67,7 @@ export const decodeState = (search) => {
     if (parsed !== null) {
       selectedKey = 'custom';
       customValue = String(parsed);
+      customKm = unitToKm(parsed, unit);
     }
   }
 
@@ -68,7 +76,8 @@ export const decodeState = (search) => {
   return {
     selectedKey,
     customValue,
-    unit: params.get('u') === 'mi' ? 'mi' : 'km',
+    customKm,
+    unit,
     mode: params.get('m') === 'time' ? 'paceFromTime' : 'timeFromPace',
     paceSeconds: clamp(params.get('p'), 1, 86400, DEFAULT_STATE.paceSeconds),
     totalSeconds: clamp(params.get('t'), 1, 86400, DEFAULT_STATE.totalSeconds),
