@@ -30,6 +30,12 @@ These need account access (Google, GoDaddy) and can't be done from the repo.
 
 Impressions data takes days to weeks to appear.
 
+The sitemap is generated at build time and lists the home page plus every page
+under `/pace/` — 35 URLs at the time of writing. Watch the **Pages** report in
+Search Console after submitting: if the generated pages get indexed but attract
+no impressions after a couple of months, that is the signal the keyword targets
+are wrong, not that more pages are needed.
+
 ## How the domain is wired
 
 `racepacepro.com` is registered at GoDaddy, DNS is hosted by GoDaddy

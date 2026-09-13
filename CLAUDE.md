@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 - `npm start` — run the dev server (CRA, http://localhost:3000)
-- `npm run build` — production build to `build/`
+- `npm run build` — production build to `build/`, then `postbuild` runs `scripts/generate-pages.js` to write the static SEO pages. Both Vercel and the Actions workflow use `npm run build`, so the pages are generated on every deploy.
 - `npm test` — run tests via `react-scripts test` (Jest + Testing Library, watch mode). No test files exist yet; to run a single test file use `npm test -- <path-or-name-pattern>`.
 - `npm run deploy` — build and publish `build/` to the `gh-pages` branch (via `gh-pages` package)
 
@@ -19,6 +19,16 @@ This is a Create React App (react-scripts 5) single-page app with Tailwind CSS, 
 - `src/App.js` renders `PaceCalculator` — the whole app.
 - `src/PaceCalculator.js` is the entire application logic and UI: a single functional component holding all state (distance, unit, pace, time, active tab) and both calculation directions (pace→time and time→pace). There is no routing, no additional components, and no backend — all conversion math (km/mile factors, popular race distances) is inlined in this file.
 - State flows through one `useEffect` that recalculates the derived value (time or pace, based on `activeTab`) whenever any relevant input changes, rather than each handler recalculating directly.
+
+### Static SEO pages
+
+Alongside the React app, the build emits ~34 standalone HTML pages under `build/pace/` — one per race distance ("hub") and one per goal time ("Sub-3:30 Marathon"). They exist because the app is client-rendered: a crawler hitting a React route sees an empty `<div id="root">`, so these are written as plain HTML instead.
+
+- `src/pageData.js` defines the page set and derives every figure from `paceMath`, so pages cannot drift from the calculator. It lives in `src/` so the normal test runner covers it.
+- `scripts/generate-pages.js` renders them. It loads `src/pageData.js` through `@babel/core` at build time rather than duplicating the maths in CommonJS.
+- Generated pages are static content and link into the app via the query-string state in `src/urlState.js` (`/?d=marathon&m=time&t=12600`), so the calculator opens on the right target.
+- All internal links use a constant `../../` prefix, not absolute paths: every generated page sits two levels deep, and absolute paths break wherever the site is served from a subpath.
+- `sitemap.xml` is written by the generator and is no longer a file in `public/`.
 
 ## Deployment
 
