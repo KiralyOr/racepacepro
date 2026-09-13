@@ -59,6 +59,46 @@ describe('calculating', () => {
   });
 });
 
+describe('custom distance across unit switches', () => {
+  const custom = () => screen.getByLabelText('Custom distance');
+  const setCustom = (value) => {
+    fireEvent.click(screen.getByRole('radio', { name: 'Custom' }));
+    fireEvent.change(custom(), { target: { value } });
+  };
+
+  test('returns to the number originally typed after a round trip', () => {
+    render(<PaceCalculator />);
+    setCustom('10');
+
+    fireEvent.click(screen.getByRole('radio', { name: 'Miles' }));
+    expect(custom()).toHaveValue(6.21);
+
+    fireEvent.click(screen.getByRole('radio', { name: 'Kilometres' }));
+    expect(custom()).toHaveValue(10);
+  });
+
+  test('does not drift over repeated switches', () => {
+    render(<PaceCalculator />);
+    setCustom('10');
+
+    for (let i = 0; i < 4; i += 1) {
+      fireEvent.click(screen.getByRole('radio', { name: 'Miles' }));
+      fireEvent.click(screen.getByRole('radio', { name: 'Kilometres' }));
+    }
+
+    expect(custom()).toHaveValue(10);
+  });
+
+  test('converts a distance typed in miles', () => {
+    render(<PaceCalculator />);
+    fireEvent.click(screen.getByRole('radio', { name: 'Miles' }));
+    setCustom('26.2');
+
+    fireEvent.click(screen.getByRole('radio', { name: 'Kilometres' }));
+    expect(custom()).toHaveValue(42.16);
+  });
+});
+
 describe('splits', () => {
   test('lists each kilometre and marks the finish', () => {
     render(<PaceCalculator />);
