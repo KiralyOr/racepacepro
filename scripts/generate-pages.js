@@ -48,6 +48,7 @@ const { MARATHONS, FEATURED_MARATHONS, relatedRaces } = loadModule(
 const { ABOUT, FAQ } = loadModule(path.join(ROOT, 'src/homeContent.js'));
 const { analyticsHtml } = loadModule(path.join(ROOT, 'src/analytics.js'));
 const { PREDICTOR_PAGE, predictorTables } = loadModule(path.join(ROOT, 'src/predictorData.js'));
+const { NAV, sectionFor } = loadModule(path.join(ROOT, 'src/navigation.js'));
 
 // Relative rather than absolute so pages work wherever the site is served
 // from, including a subpath such as the GitHub Pages copy. The depth varies:
@@ -64,12 +65,20 @@ const STYLES = `
 body{margin:0;background:#f8fafc;color:#0f172a;line-height:1.55;
  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif}
 a{color:#1d4ed8}
+/* 42rem matches Tailwind's max-w-2xl, which the React shell uses. The two
+   were 44rem and 42rem, so the header and content shifted by 32px when a
+   reader moved between the home page and a generated one. */
 .bar{background:#fff;border-bottom:1px solid #e2e8f0}
-.bar .in{max-width:44rem;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:10px}
+.bar .in{max-width:42rem;margin:0 auto;padding:14px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.nav{display:flex;flex-wrap:wrap;gap:6px 16px;margin-left:auto}
+.nav a{font-size:14px;color:#475569;font-weight:500}
+.nav a:hover{color:#0f172a}
+.nav a[aria-current]{color:#1d4ed8}
+.bar .brand{gap:10px}
 .bar svg{width:26px;height:26px}
 .bar b{font-size:16px;letter-spacing:-.01em}
 .bar a{color:#0f172a;text-decoration:none;display:flex;align-items:center;gap:10px}
-main{max-width:44rem;margin:0 auto;padding:24px 16px 40px}
+main{max-width:42rem;margin:0 auto;padding:24px 16px 40px}
 .crumb{font-size:13px;color:#64748b;margin-bottom:14px}
 .crumb a{color:#64748b}
 h1{font-size:28px;line-height:1.2;letter-spacing:-.02em;margin:0 0 10px}
@@ -100,7 +109,7 @@ tr.fin td{color:#1d4ed8;font-weight:650}
 ul{margin:0 0 12px;padding-left:20px;color:#475569;font-size:15px}
 li{margin-bottom:7px}
 footer{border-top:1px solid #e2e8f0;background:#fff;margin-top:32px}
-footer .in{max-width:44rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
+footer .in{max-width:42rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
 `;
 
 const LOGO = `<svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#2563eb"/><rect x="234" y="116" width="44" height="52" rx="12" fill="#fff"/><circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40"/><path d="M256 302 L330 228" fill="none" stroke="#fff" stroke-width="36" stroke-linecap="round"/></svg>`;
@@ -155,7 +164,15 @@ ${extraSchema ? `<script type="application/ld+json">${JSON.stringify(extraSchema
 ${analyticsHtml()}
 </head>
 <body>
-<div class="bar"><div class="in"><a href="${REL}">${LOGO}<b>Race Pace Pro</b></a></div></div>
+<div class="bar"><div class="in">
+<a class="brand" href="${REL}">${LOGO}<b>Race Pace Pro</b></a>
+<nav class="nav" aria-label="Site">${NAV.map(
+    (item) =>
+      `<a href="${REL}${item.href}"${
+        item.href === sectionFor(slug) ? ' aria-current="page"' : ''
+      }>${esc(item.label)}</a>`
+  ).join('')}</nav>
+</div></div>
 <main>
 <nav class="crumb">${crumbs
     .map((c, i) => (i === crumbs.length - 1 ? esc(c.name) : `<a href="${REL}${c.href.replace(/^\//, '')}">${esc(c.name)}</a>`))
@@ -362,6 +379,58 @@ const marathonBody = (race, REL) => `
       .join('')}
   </div>
   <p><a href="${REL}marathons/">All ${MARATHONS.length} pacing guides</a></p>
+</div>`;
+
+const paceIndexBody = (REL) => `
+<h1>Race pace charts</h1>
+<p class="lede">The pace every common goal time demands, for each standard race distance, with
+full split tables. Pick a distance, then pick the time you are chasing.</p>
+
+${RACES.map((race) => {
+  const hub = hubPage(race);
+  return `<div class="card">
+  <h2><a href="${REL}pace/${race.id}/">${esc(race.name)} pace chart</a></h2>
+  <p>${esc(race.km)} km, or ${(race.km / 1.609344).toFixed(2)} miles. Every common goal time with
+  the pace it needs in minutes per kilometre and per mile.</p>
+  <div class="links">
+    ${hub.goals
+      .map((goal) => `<a href="${REL}${goal.slug}/">${esc(goal.heading)}</a>`)
+      .join('')}
+  </div>
+</div>`;
+}).join('')}
+
+<div class="card">
+  <h2>Not sure which time to aim for?</h2>
+  <p>Predict a realistic target from a race you have already run, then come back and pick the
+  chart that matches it.</p>
+  <p><a class="cta" href="${REL}predictor/">Open the race time predictor</a></p>
+</div>
+
+<div class="card">
+  <h2>Any other distance</h2>
+  <p>The calculator handles distances these charts do not cover, in kilometres or miles, with
+  splits and negative split pacing.</p>
+  <p><a class="cta" href="${REL}">Open the calculator</a></p>
+</div>`;
+
+const guidesIndexBody = (REL) => `
+<h1>Running guides</h1>
+<p class="lede">Longer pieces on the decisions the calculator cannot make for you: how much
+training a first marathon actually takes, and how to pick a goal time you can defend.</p>
+
+${ARTICLES.map(
+  (article) => `<div class="card">
+  <h2><a href="${REL}${article.slug}/">${esc(article.title)}</a></h2>
+  <p>${esc(article.description)}</p>
+  <p><a href="${REL}${article.slug}/">Read the guide</a></p>
+</div>`
+).join('')}
+
+<div class="card">
+  <h2>Pacing a specific race</h2>
+  <p>Course by course guides to what each major marathon does to your splits.</p>
+  <p><a class="cta" href="${REL}marathons/">All ${MARATHONS.length} marathon pacing guides</a></p>
 </div>`;
 
 const predictorBody = (REL) => `
@@ -626,6 +695,30 @@ const main = () => {
   });
 
   write(
+    'pace',
+    layout({
+      slug: 'pace',
+      title: 'Race Pace Charts for 5K, 10K, Half Marathon and Marathon',
+      description:
+        'Pace charts for every standard race distance: the pace each common goal time demands, in minutes per kilometre and per mile, with full split tables.',
+      crumbs: [{ name: 'Home', href: '/' }, { name: 'Pace charts', href: '/pace/' }],
+      body: paceIndexBody(relFor('pace')),
+    })
+  );
+
+  write(
+    'guides',
+    layout({
+      slug: 'guides',
+      title: 'Running Guides: First Marathon and Goal Time Setting',
+      description:
+        'Longer guides on marathon training and race planning: what a first marathon build involves, and how to set a goal time you can actually defend on the day.',
+      crumbs: [{ name: 'Home', href: '/' }, { name: 'Guides', href: '/guides/' }],
+      body: guidesIndexBody(relFor('guides')),
+    })
+  );
+
+  write(
     PREDICTOR_PAGE.slug,
     layout({
       slug: PREDICTOR_PAGE.slug,
@@ -673,6 +766,8 @@ const main = () => {
     '',
     ...pages.map((p) => `${p.slug}/`),
     ...ARTICLES.map((a) => `${a.slug}/`),
+    'pace/',
+    'guides/',
     `${PREDICTOR_PAGE.slug}/`,
     'marathons/',
     ...MARATHONS.map((race) => `marathons/${race.id}/`),

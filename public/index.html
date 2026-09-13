@@ -54,20 +54,35 @@
   <body>
     <div class="min-h-screen bg-slate-50">
       <header class="border-b border-slate-200 bg-white">
-        <div class="mx-auto flex max-w-2xl items-center gap-2.5 px-4 py-4">
-          <svg viewBox="0 0 512 512" aria-hidden="true" class="h-7 w-7">
-            <rect width="512" height="512" rx="112" fill="#2563eb" />
-            <rect x="234" y="116" width="44" height="52" rx="12" fill="#fff" />
-            <circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40" />
-            <path
-              d="M256 302 L330 228"
-              fill="none"
-              stroke="#fff"
-              stroke-width="36"
-              stroke-linecap="round"
-            />
-          </svg>
-          <span class="text-lg font-semibold tracking-tight text-slate-900">Race Pace Pro</span>
+        <div class="mx-auto flex max-w-2xl flex-wrap items-center gap-x-5 gap-y-2 px-4 py-4">
+          <div class="flex items-center gap-2.5">
+            <svg viewBox="0 0 512 512" aria-hidden="true" class="h-7 w-7">
+              <rect width="512" height="512" rx="112" fill="#2563eb" />
+              <rect x="234" y="116" width="44" height="52" rx="12" fill="#fff" />
+              <circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40" />
+              <path
+                d="M256 302 L330 228"
+                fill="none"
+                stroke="#fff"
+                stroke-width="36"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span class="text-lg font-semibold tracking-tight text-slate-900">Race Pace Pro</span>
+          </div>
+          <!-- Kept in step with src/navigation.js by a test: this copy is hand
+               written because the home page is the React shell, not a generated file. -->
+          <nav
+            data-site-nav
+            aria-label="Site"
+            class="flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium text-slate-600 sm:ml-auto"
+          >
+            <a href="" aria-current="page" class="text-blue-700">Calculator</a>
+            <a href="pace/" class="hover:text-slate-900">Pace charts</a>
+            <a href="predictor/" class="hover:text-slate-900">Predictor</a>
+            <a href="marathons/" class="hover:text-slate-900">Marathons</a>
+            <a href="guides/" class="hover:text-slate-900">Guides</a>
+          </nav>
         </div>
       </header>
 
