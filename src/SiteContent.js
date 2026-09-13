@@ -11,6 +11,7 @@ import {
 import { ZONE_STYLES } from './zoneStyles';
 import { ARTICLES } from './articles';
 import PaceCurve from './PaceCurve';
+import TrainingStart from './TrainingStart';
 
 // Keep these questions in sync with the FAQPage JSON-LD in public/index.html.
 // Structured data has to match what's actually on the page.
@@ -139,6 +140,15 @@ const SiteContent = ({ highlightPacePerKm }) => (
         Everything runs in your browser. Nothing is uploaded, and the link you copy carries your
         settings so you can send a pacing plan to a training partner.
       </p>
+    </section>
+
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <h2 className="text-base font-semibold text-slate-900">When to start training</h2>
+      <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        Pick a race date and say where you are now. This works out how many weeks the build takes
+        and the date you need to begin, and tells you plainly when there is not enough time.
+      </p>
+      <TrainingStart />
     </section>
 
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
