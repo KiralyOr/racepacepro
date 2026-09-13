@@ -17,6 +17,11 @@ import { ARTICLES } from './articles';
 import { MARATHONS } from './marathons';
 import { PREDICTOR_PAGE } from './predictorData';
 
+// Link text comes from `heading`, never from `title`. The first version split
+// the title on a colon to drop the " Pace and Splits" suffix, which worked for
+// "Sub-20 5K" and decapitated every hh:mm target at the time colon: eighteen of
+// the thirty goal entries shipped as "Sub-1", "Sub-2", "Sub-3", all pointing at
+// different pages. A test now asserts the titles are distinct.
 const url = (slug) => `${SITE_ORIGIN}/${slug ? `${slug}/` : ''}`;
 const entry = (title, slug, note) => `- [${title}](${url(slug)}): ${note}`;
 
@@ -56,7 +61,7 @@ export const buildLlmsTxt = () => {
       ),
       ...RACES.map((race) => {
         const hub = hubPage(race);
-        return entry(hub.title.split(':')[0], hub.slug, hub.description);
+        return entry(hub.heading, hub.slug, hub.description);
       }),
     ]],
 
@@ -88,7 +93,7 @@ export const buildLlmsTxt = () => {
     // The convention reserves this heading for detail a reader can skip when
     // context is short. Thirty goal time pages is exactly that: useful if
     // someone wants a specific target, noise otherwise.
-    ['Optional', goals.map((page) => entry(page.title.split(':')[0], page.slug, page.description))],
+    ['Optional', goals.map((page) => entry(page.heading, page.slug, page.description))],
   ];
 
   return [
