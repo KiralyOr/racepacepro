@@ -124,19 +124,35 @@ describe('guides', () => {
 describe('house style', () => {
   const fs = require('fs');
   const path = require('path');
-  const dir = path.join(__dirname, '..');
-  const files = [
-    'src/articles.js', 'src/marathons.js', 'src/trainingPlan.js', 'src/TrainingStart.js',
-    'src/pageData.js', 'src/SiteContent.js', 'src/App.js',
-    'src/paceMath.js', 'src/urlState.js', 'src/PaceCalculator.js', 'src/zoneStyles.js',
-    'scripts/generate-pages.js', 'public/index.html', 'public/manifest.json',
-    'CLAUDE.md', 'docs/operations.md', 'README.md',
-  ];
+  const root = path.join(__dirname, '..');
+
+  // Globbed, not listed. This was a hand written list of twelve files, which
+  // covered the project when it was written and silently stopped covering it
+  // as files were added: none of the marathon, theme, navigation, footer,
+  // predictor or llms.txt sources were checked at all.
+  const walk = (dir) =>
+    fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap((e) => {
+      const rel = `${dir}/${e.name}`;
+      if (e.isDirectory()) return e.name === 'og' ? [] : walk(rel);
+      return /\.(js|css|html|json|md)$/.test(e.name) ? [rel] : [];
+    });
+
+  const files = [...walk('src'), ...walk('scripts'), ...walk('public'), ...walk('docs')]
+    // The file defining the rule necessarily contains the characters it bans.
+    .filter((f) => f !== 'src/pageData.test.js')
+    .concat('CLAUDE.md', 'README.md');
+
+  test('the sweep actually covers the project', () => {
+    expect(files.length).toBeGreaterThan(30);
+    expect(files).toContain('src/marathons.js');
+    expect(files).toContain('src/llmsTxt.js');
+    expect(files).toContain('scripts/generate-og-images.js');
+  });
 
   // Em and en dashes read as machine-written prose; the project deliberately
   // uses ordinary punctuation instead.
   test.each(files)('%s uses no em or en dashes', (file) => {
-    const contents = fs.readFileSync(path.join(dir, file), 'utf8');
+    const contents = fs.readFileSync(path.join(root, file), 'utf8');
     expect(contents).not.toMatch(/[—–]/);
   });
 });

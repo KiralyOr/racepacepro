@@ -9,6 +9,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm test` runs tests via `react-scripts test` (Jest + Testing Library, watch mode). No test files exist yet; to run a single test file use `npm test -- <path-or-name-pattern>`.
 - `npm run deploy` builds and publishes `build/` to the `gh-pages` branch (via `gh-pages` package)
 
+- `node scripts/verify-build.js` serves `build/` and crawls it in a real browser, at a domain root and at a subpath, checking broken links, the nav, one `h1` per page, and horizontal scroll at 900px and 390px. Needs Playwright and is not part of the build. Run it before shipping changes to the generator, the navigation or the layout.
+- `node scripts/generate-og-images.js` regenerates the per race share images. Also needs Playwright, also not part of the build. Run it after adding a race.
+
 There is no lint script; ESLint runs as part of `react-scripts` (config lives in `package.json`'s `eslintConfig`, which disables `react-hooks/exhaustive-deps`).
 
 ## Architecture
@@ -40,6 +43,67 @@ Alongside the React app, the build emits ~60 standalone HTML pages: one per race
 - `pace/` and `guides/` are index pages, added because the nav needed destinations. Every generated page is 42rem wide, matching Tailwind's `max-w-2xl` in the React shell; they were 44rem and 42rem, which shifted the header by 32px when a reader moved between the home page and a generated one.
 - `src/llmsTxt.js` builds `llms.txt`, a markdown index for agents that fetch and read rather than crawl. The convention is a proposal, not a standard, and nothing is documented as requiring it, so this is cheap insurance rather than a fix. It is generated from the same page data as everything else, so it cannot go stale when a race is added, and its URLs are absolute (the opposite of the rule for internal HTML links) because a relative path means nothing to an agent fetching from elsewhere. A test asserts it and `sitemap.xml` list exactly the same set of URLs.
 - `sitemap.xml` is written by the generator and is no longer a file in `public/`. The page count in the build log comes from a counter in `write()`, not from arithmetic over the page sources, which used to go stale whenever a page was added from somewhere new.
+
+## SEO rules
+
+Search traffic is the whole point of the static pages, and most of what protects it
+is invisible in a diff. These are the invariants. Each one names what enforces it,
+so a change that breaks one fails rather than quietly costing rankings months later.
+
+**Every page must be readable with JavaScript disabled.** This is the rule everything
+else rests on. The generated pages load no bundle at all, and the home page renders
+its content from the shell plus generator injection rather than from React. Content
+added to a React component is invisible to a crawler and to the agentic fetchers that
+do not execute JavaScript. New prose belongs in the generator, `homeContent.js` or a
+data module, never only in a component.
+
+**Titles and descriptions must be unique per page,** and descriptions sized for a
+search result. Duplicates are how a large generated page set turns into a thin content
+problem. Enforced in `pageData.test.js`.
+
+**Internal links are relative with no leading slash,** computed per page by
+`relFor(slug)`. An absolute path resolves at the domain root and 404s on the GitHub
+Pages subpath copy. Two deliberate exceptions: `llms.txt` uses absolute URLs because a
+relative path means nothing to an agent fetching it from elsewhere, and the Vercel
+analytics tag is a root absolute platform endpoint. Checked by `scripts/verify-build.js`, which
+crawls the built site at both a root and a subpath.
+
+**Every generated page carries a canonical pointing at `SITE_ORIGIN`,** including the
+copies served from GitHub Pages. That canonical is the only reason the Pages duplicate
+is harmless rather than competing with the real domain. Do not make it relative.
+
+**Structured data is derived from what the page renders, never written alongside it.**
+The `FAQPage` blocks on the home page and the hubs are built from the same arrays the
+HTML is built from. Schema that describes content the page does not show is a
+liability, and hand maintained schema always drifts eventually.
+
+**`sitemap.xml` and `llms.txt` must list the same set of URLs.** They describe the same
+site to a crawler and to an agent, so a disagreement means one of them is wrong about
+what exists. Enforced in `llmsTxt.test.js`.
+
+**Every nav destination must be a page the build writes.** A nav link that 404s appears
+on all 63 pages at once. Enforced in `navigation.test.js`, which also checks the hand
+written copy in the React shell still matches `navigation.js`.
+
+**No page may state a race date, ballot window or entry deadline.** This project cannot
+verify them and they change every year. Enforced in `marathons.test.js`, which fails on
+any year or calendar date in the prose.
+
+**Adding a race means running `scripts/generate-og-images.js`.** It is not part of the
+build. `raceTheme.test.js` fails if a race has no share image, so this cannot be
+forgotten silently.
+
+**No em or en dashes anywhere.** They read as machine written. Enforced across every
+source and documentation file by a globbed sweep in `pageData.test.js`.
+
+### Things that look like improvements and are not
+
+- Setting `homepage` in `package.json` to an absolute URL. See Deployment below.
+- Making generated pages depend on JavaScript for anything a reader needs.
+- Linking every page from every page. At 22 races that is a wall of near identical
+  anchors that spreads each page's link weight thinly. Use `FEATURED_MARATHONS` and
+  `relatedRaces()`.
+- Switching GA4 on without adding a cookie consent prompt. See `src/analytics.js`.
 
 ## Deployment
 
