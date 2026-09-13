@@ -21,18 +21,30 @@
 <meta name="twitter:description" content="Half Marathon pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.">
 <meta name="twitter:image" content="https://racepacepro.com/og-image.png">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://racepacepro.com/"},{"@type":"ListItem","position":2,"name":"Half Marathon","item":"https://racepacepro.com/pace/half-marathon/"}]}</script>
-
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How far is a half marathon in miles?","acceptedAnswer":{"@type":"Answer","text":"A half marathon is 21.0975 kilometres, or 13.11 miles. It is exactly half the marathon distance, which is where the name comes from and, unhelpfully, where most of the confusion about how hard to run it starts."}},{"@type":"Question","name":"Do I need to take gels in a half marathon?","acceptedAnswer":{"@type":"Answer","text":"For most runners one or two is enough, and plenty finish comfortably without any. It depends far more on how long you are out there than on the distance itself: a runner finishing in two and a half hours has a very different fuelling problem from one finishing in ninety minutes."}},{"@type":"Question","name":"How much faster is half marathon pace than marathon pace?","acceptedAnswer":{"@type":"Answer","text":"About 4.2% per kilometre, using the Riegel formula. If you are hoping to run a marathon at close to your half pace, that gap is the reason it will not happen."}}]}</script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f8fafc;color:#0f172a;line-height:1.55;
  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif}
 a{color:#1d4ed8}
+/* 42rem matches Tailwind's max-w-2xl, which the React shell uses. The two
+   were 44rem and 42rem, so the header and content shifted by 32px when a
+   reader moved between the home page and a generated one. */
 .bar{background:#fff;border-bottom:1px solid #e2e8f0}
-.bar .in{max-width:44rem;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:10px}
+.bar .in{max-width:42rem;margin:0 auto;padding:14px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.nav{display:flex;flex-wrap:wrap;gap:6px 16px;margin-left:auto}
+.nav a{font-size:14px;color:#475569;font-weight:500}
+.nav a:hover{color:#0f172a}
+.nav a[aria-current]{color:#1d4ed8}
+.bar .brand{gap:10px}
 .bar svg{width:26px;height:26px}
 .bar b{font-size:16px;letter-spacing:-.01em}
 .bar a{color:#0f172a;text-decoration:none;display:flex;align-items:center;gap:10px}
-main{max-width:44rem;margin:0 auto;padding:24px 16px 40px}
+main{max-width:42rem;margin:0 auto;padding:24px 16px 40px}
+dl{margin:0}
+dt{font-weight:600;margin-top:14px}
+dt:first-child{margin-top:0}
+dd{margin:4px 0 0}
 .crumb{font-size:13px;color:#64748b;margin-bottom:14px}
 .crumb a{color:#64748b}
 h1{font-size:28px;line-height:1.2;letter-spacing:-.02em;margin:0 0 10px}
@@ -63,11 +75,15 @@ tr.fin td{color:#1d4ed8;font-weight:650}
 ul{margin:0 0 12px;padding-left:20px;color:#475569;font-size:15px}
 li{margin-bottom:7px}
 footer{border-top:1px solid #e2e8f0;background:#fff;margin-top:32px}
-footer .in{max-width:44rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
+footer .in{max-width:42rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
 </style>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-<div class="bar"><div class="in"><a href="../../"><svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#2563eb"/><rect x="234" y="116" width="44" height="52" rx="12" fill="#fff"/><circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40"/><path d="M256 302 L330 228" fill="none" stroke="#fff" stroke-width="36" stroke-linecap="round"/></svg><b>Race Pace Pro</b></a></div></div>
+<div class="bar"><div class="in">
+<a class="brand" href="../../"><svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#2563eb"/><rect x="234" y="116" width="44" height="52" rx="12" fill="#fff"/><circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40"/><path d="M256 302 L330 228" fill="none" stroke="#fff" stroke-width="36" stroke-linecap="round"/></svg><b>Race Pace Pro</b></a>
+<nav class="nav" aria-label="Site"><a href="../../">Calculator</a><a href="../../pace/" aria-current="page">Pace charts</a><a href="../../predictor/">Predictor</a><a href="../../marathons/">Marathons</a><a href="../../guides/">Guides</a></nav>
+</div></div>
 <main>
 <nav class="crumb"><a href="../../">Home</a> › Half Marathon</nav>
 
@@ -125,6 +141,21 @@ Pick a target for its full split table.</p>
 </div>
 
 <div class="card">
+  <h2>How to pace a half marathon</h2>
+  <p>The half marathon is the distance most often misjudged, because the name suggests it is half a marathon in effort as well as distance. It is not. It is run much closer to 10K intensity than to marathon intensity, and the pacing discipline it needs is closer to a marathon.</p><p>Against your 10K pace, expect roughly 4.6% slower per kilometre. Against a marathon, a half is run about 4.2% quicker per kilometre, which is why a marathon goal derived carelessly from a half time is usually optimistic.</p><p>This is the shortest distance where a small pacing error compounds into minutes. Five seconds per kilometre over the top costs you about a minute and three quarters across the race, and it costs it in the last five kilometres rather than spread evenly, which is what makes the finish feel so much worse than the number suggests.</p><p>An even pace or a very slight negative split is the target. The second half should feel like a controlled effort you are gradually spending, not a rescue operation.</p><p>Fuelling starts to matter here, but less than most people assume. The deciding factor is time on your feet rather than the distance itself: a runner out for two and a half hours has a genuine fuelling problem, while one finishing inside ninety minutes largely does not. Work out which of those you are before deciding how many gels to carry.</p>
+</div>
+
+<div class="card">
+  <h2>Common mistakes</h2>
+  <ul><li>Assuming half marathon effort sits halfway between 10K and marathon effort. It sits much closer to the 10K end.</li><li>Going out at the pace your goal marathon would need, on the theory that a half should feel comfortable at that pace.</li><li>Trying new gels or new shoes on race day because the distance feels manageable enough to experiment.</li></ul>
+</div>
+
+<div class="card">
+  <h2>Half Marathon questions</h2>
+  <dl><dt>How far is a half marathon in miles?</dt><dd>A half marathon is 21.0975 kilometres, or 13.11 miles. It is exactly half the marathon distance, which is where the name comes from and, unhelpfully, where most of the confusion about how hard to run it starts.</dd><dt>Do I need to take gels in a half marathon?</dt><dd>For most runners one or two is enough, and plenty finish comfortably without any. It depends far more on how long you are out there than on the distance itself: a runner finishing in two and a half hours has a very different fuelling problem from one finishing in ninety minutes.</dd><dt>How much faster is half marathon pace than marathon pace?</dt><dd>About 4.2% per kilometre, using the Riegel formula. If you are hoping to run a marathon at close to your half pace, that gap is the reason it will not happen.</dd></dl>
+</div>
+
+<div class="card">
   <h2>Work out your own target</h2>
   <p>Any distance, any pace, in kilometres or miles, with split times and negative-split pacing.</p>
   <p><a class="cta" href="../../?d=half&amp;u=km&amp;m=pace&amp;p=300">Open the calculator</a></p>
@@ -142,6 +173,12 @@ Pick a target for its full split table.</p>
   <div class="links">
     <a href="../../pace/5k/">5K</a><a href="../../pace/10k/">10K</a><a href="../../pace/marathon/">Marathon</a>
   </div>
+</div>
+
+<div class="card">
+  <h2>Not sure which goal is realistic?</h2>
+  <p>Predict your half marathon time from a race you have already run.</p>
+  <p><a class="cta" href="../../predictor/">Open the race time predictor</a></p>
 </div>
 </main>
 <footer><div class="in">Race Pace Pro is a free running pace calculator. Calculations run entirely in your browser.</div></footer>

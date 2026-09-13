@@ -27,12 +27,24 @@
 body{margin:0;background:#f8fafc;color:#0f172a;line-height:1.55;
  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif}
 a{color:#1d4ed8}
+/* 42rem matches Tailwind's max-w-2xl, which the React shell uses. The two
+   were 44rem and 42rem, so the header and content shifted by 32px when a
+   reader moved between the home page and a generated one. */
 .bar{background:#fff;border-bottom:1px solid #e2e8f0}
-.bar .in{max-width:44rem;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:10px}
+.bar .in{max-width:42rem;margin:0 auto;padding:14px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.nav{display:flex;flex-wrap:wrap;gap:6px 16px;margin-left:auto}
+.nav a{font-size:14px;color:#475569;font-weight:500}
+.nav a:hover{color:#0f172a}
+.nav a[aria-current]{color:#1d4ed8}
+.bar .brand{gap:10px}
 .bar svg{width:26px;height:26px}
 .bar b{font-size:16px;letter-spacing:-.01em}
 .bar a{color:#0f172a;text-decoration:none;display:flex;align-items:center;gap:10px}
-main{max-width:44rem;margin:0 auto;padding:24px 16px 40px}
+main{max-width:42rem;margin:0 auto;padding:24px 16px 40px}
+dl{margin:0}
+dt{font-weight:600;margin-top:14px}
+dt:first-child{margin-top:0}
+dd{margin:4px 0 0}
 .crumb{font-size:13px;color:#64748b;margin-bottom:14px}
 .crumb a{color:#64748b}
 h1{font-size:28px;line-height:1.2;letter-spacing:-.02em;margin:0 0 10px}
@@ -63,11 +75,15 @@ tr.fin td{color:#1d4ed8;font-weight:650}
 ul{margin:0 0 12px;padding-left:20px;color:#475569;font-size:15px}
 li{margin-bottom:7px}
 footer{border-top:1px solid #e2e8f0;background:#fff;margin-top:32px}
-footer .in{max-width:44rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
+footer .in{max-width:42rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
 </style>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-<div class="bar"><div class="in"><a href="../../"><svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#2563eb"/><rect x="234" y="116" width="44" height="52" rx="12" fill="#fff"/><circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40"/><path d="M256 302 L330 228" fill="none" stroke="#fff" stroke-width="36" stroke-linecap="round"/></svg><b>Race Pace Pro</b></a></div></div>
+<div class="bar"><div class="in">
+<a class="brand" href="../../"><svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#2563eb"/><rect x="234" y="116" width="44" height="52" rx="12" fill="#fff"/><circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40"/><path d="M256 302 L330 228" fill="none" stroke="#fff" stroke-width="36" stroke-linecap="round"/></svg><b>Race Pace Pro</b></a>
+<nav class="nav" aria-label="Site"><a href="../../">Calculator</a><a href="../../pace/" aria-current="page">Pace charts</a><a href="../../predictor/">Predictor</a><a href="../../marathons/">Marathons</a><a href="../../guides/">Guides</a></nav>
+</div></div>
 <main>
 <nav class="crumb"><a href="../../">Home</a> › <a href="../../pace/marathon/">Marathon</a> › Sub-3:45</nav>
 

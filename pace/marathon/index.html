@@ -21,18 +21,30 @@
 <meta name="twitter:description" content="Marathon pace chart: the pace needed for every common goal time, in minutes per kilometre and per mile, with full split tables.">
 <meta name="twitter:image" content="https://racepacepro.com/og-image.png">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://racepacepro.com/"},{"@type":"ListItem","position":2,"name":"Marathon","item":"https://racepacepro.com/pace/marathon/"}]}</script>
-
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How far is a marathon in miles?","acceptedAnswer":{"@type":"Answer","text":"A marathon is 42.195 kilometres, or 26.22 miles. The awkward figure is the officially fixed distance rather than a rounding of something tidier, and every certified marathon course is measured to it."}},{"@type":"Question","name":"Should I bank time early in a marathon?","acceptedAnswer":{"@type":"Answer","text":"No. It is intuitive and it is wrong. Running above your sustainable pace costs disproportionately more energy than running at it, so time gained early is repaid with interest in the final ten kilometres. Nearly every personal best is run at an even pace or slightly negative."}},{"@type":"Question","name":"How much slower is marathon pace than half marathon pace?","acceptedAnswer":{"@type":"Answer","text":"Around 4.2% slower per kilometre by the Riegel formula, and often more than that for anyone who has not done marathon specific long runs. Riegel assumes you are equally trained for both distances, which is rarely true of the marathon."}}]}</script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f8fafc;color:#0f172a;line-height:1.55;
  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif}
 a{color:#1d4ed8}
+/* 42rem matches Tailwind's max-w-2xl, which the React shell uses. The two
+   were 44rem and 42rem, so the header and content shifted by 32px when a
+   reader moved between the home page and a generated one. */
 .bar{background:#fff;border-bottom:1px solid #e2e8f0}
-.bar .in{max-width:44rem;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:10px}
+.bar .in{max-width:42rem;margin:0 auto;padding:14px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.nav{display:flex;flex-wrap:wrap;gap:6px 16px;margin-left:auto}
+.nav a{font-size:14px;color:#475569;font-weight:500}
+.nav a:hover{color:#0f172a}
+.nav a[aria-current]{color:#1d4ed8}
+.bar .brand{gap:10px}
 .bar svg{width:26px;height:26px}
 .bar b{font-size:16px;letter-spacing:-.01em}
 .bar a{color:#0f172a;text-decoration:none;display:flex;align-items:center;gap:10px}
-main{max-width:44rem;margin:0 auto;padding:24px 16px 40px}
+main{max-width:42rem;margin:0 auto;padding:24px 16px 40px}
+dl{margin:0}
+dt{font-weight:600;margin-top:14px}
+dt:first-child{margin-top:0}
+dd{margin:4px 0 0}
 .crumb{font-size:13px;color:#64748b;margin-bottom:14px}
 .crumb a{color:#64748b}
 h1{font-size:28px;line-height:1.2;letter-spacing:-.02em;margin:0 0 10px}
@@ -63,11 +75,15 @@ tr.fin td{color:#1d4ed8;font-weight:650}
 ul{margin:0 0 12px;padding-left:20px;color:#475569;font-size:15px}
 li{margin-bottom:7px}
 footer{border-top:1px solid #e2e8f0;background:#fff;margin-top:32px}
-footer .in{max-width:44rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
+footer .in{max-width:42rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
 </style>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-<div class="bar"><div class="in"><a href="../../"><svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#2563eb"/><rect x="234" y="116" width="44" height="52" rx="12" fill="#fff"/><circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40"/><path d="M256 302 L330 228" fill="none" stroke="#fff" stroke-width="36" stroke-linecap="round"/></svg><b>Race Pace Pro</b></a></div></div>
+<div class="bar"><div class="in">
+<a class="brand" href="../../"><svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#2563eb"/><rect x="234" y="116" width="44" height="52" rx="12" fill="#fff"/><circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40"/><path d="M256 302 L330 228" fill="none" stroke="#fff" stroke-width="36" stroke-linecap="round"/></svg><b>Race Pace Pro</b></a>
+<nav class="nav" aria-label="Site"><a href="../../">Calculator</a><a href="../../pace/" aria-current="page">Pace charts</a><a href="../../predictor/">Predictor</a><a href="../../marathons/">Marathons</a><a href="../../guides/">Guides</a></nav>
+</div></div>
 <main>
 <nav class="crumb"><a href="../../">Home</a> › Marathon</nav>
 
@@ -125,6 +141,21 @@ Pick a target for its full split table.</p>
 </div>
 
 <div class="card">
+  <h2>How to pace a marathon</h2>
+  <p>The marathon punishes pacing errors more than any other distance, and it punishes them late, when nothing can be done. A mistake in the first ten kilometres does not present itself until after thirty, by which point the only remaining decision is how much time you lose.</p><p>Against a half marathon, expect roughly 4.2% slower per kilometre. Runners who set a marathon target by doubling a half time and adding a few minutes almost always end up with a number that was never achievable.</p><p>Five seconds per kilometre faster than planned feels like nothing for the first hour. Across the full distance it is about three and a half minutes, and because the deficit is repaid in the last ten kilometres rather than spread out, it is the difference between finishing strongly and walking.</p><p>An even pace or a slight negative split is what almost every good marathon looks like. Banking time is the single most common plan and the single most reliable way to run a slow marathon: the energy cost of running faster than your sustainable pace is not linear, so the minute you gain early costs several later.</p>
+</div>
+
+<div class="card">
+  <h2>Common mistakes</h2>
+  <ul><li>Banking time early against the hills, the heat or the finish. It does not work, and the mechanism by which it fails is well understood.</li><li>Setting the goal from a half marathon time without applying the endurance penalty.</li><li>Changing anything on race day. Shoes, gels, breakfast and kit should all be things you have already run long in.</li></ul>
+</div>
+
+<div class="card">
+  <h2>Marathon questions</h2>
+  <dl><dt>How far is a marathon in miles?</dt><dd>A marathon is 42.195 kilometres, or 26.22 miles. The awkward figure is the officially fixed distance rather than a rounding of something tidier, and every certified marathon course is measured to it.</dd><dt>Should I bank time early in a marathon?</dt><dd>No. It is intuitive and it is wrong. Running above your sustainable pace costs disproportionately more energy than running at it, so time gained early is repaid with interest in the final ten kilometres. Nearly every personal best is run at an even pace or slightly negative.</dd><dt>How much slower is marathon pace than half marathon pace?</dt><dd>Around 4.2% slower per kilometre by the Riegel formula, and often more than that for anyone who has not done marathon specific long runs. Riegel assumes you are equally trained for both distances, which is rarely true of the marathon.</dd></dl>
+</div>
+
+<div class="card">
   <h2>Work out your own target</h2>
   <p>Any distance, any pace, in kilometres or miles, with split times and negative-split pacing.</p>
   <p><a class="cta" href="../../?d=marathon&amp;u=km&amp;m=pace&amp;p=300">Open the calculator</a></p>
@@ -142,6 +173,12 @@ Pick a target for its full split table.</p>
   <div class="links">
     <a href="../../pace/5k/">5K</a><a href="../../pace/10k/">10K</a><a href="../../pace/half-marathon/">Half Marathon</a>
   </div>
+</div>
+
+<div class="card">
+  <h2>Not sure which goal is realistic?</h2>
+  <p>Predict your marathon time from a race you have already run.</p>
+  <p><a class="cta" href="../../predictor/">Open the race time predictor</a></p>
 </div>
 </main>
 <footer><div class="in">Race Pace Pro is a free running pace calculator. Calculations run entirely in your browser.</div></footer>

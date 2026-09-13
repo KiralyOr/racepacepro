@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2563eb">
+<title>Race Pace Charts for 5K, 10K, Half Marathon and Marathon | Race Pace Pro</title>
+<meta name="description" content="Pace charts for every standard race distance: the pace each common goal time demands, in minutes per kilometre and per mile, with full split tables.">
+<link rel="canonical" href="https://racepacepro.com/pace/">
+<link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Race Pace Pro">
+<meta property="og:url" content="https://racepacepro.com/pace/">
+<meta property="og:title" content="Race Pace Charts for 5K, 10K, Half Marathon and Marathon">
+<meta property="og:description" content="Pace charts for every standard race distance: the pace each common goal time demands, in minutes per kilometre and per mile, with full split tables.">
+<meta property="og:image" content="https://racepacepro.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Race Pace Charts for 5K, 10K, Half Marathon and Marathon">
+<meta name="twitter:description" content="Pace charts for every standard race distance: the pace each common goal time demands, in minutes per kilometre and per mile, with full split tables.">
+<meta name="twitter:image" content="https://racepacepro.com/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://racepacepro.com/"},{"@type":"ListItem","position":2,"name":"Pace charts","item":"https://racepacepro.com/pace/"}]}</script>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f8fafc;color:#0f172a;line-height:1.55;
+ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif}
+a{color:#1d4ed8}
+/* 42rem matches Tailwind's max-w-2xl, which the React shell uses. The two
+   were 44rem and 42rem, so the header and content shifted by 32px when a
+   reader moved between the home page and a generated one. */
+.bar{background:#fff;border-bottom:1px solid #e2e8f0}
+.bar .in{max-width:42rem;margin:0 auto;padding:14px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.nav{display:flex;flex-wrap:wrap;gap:6px 16px;margin-left:auto}
+.nav a{font-size:14px;color:#475569;font-weight:500}
+.nav a:hover{color:#0f172a}
+.nav a[aria-current]{color:#1d4ed8}
+.bar .brand{gap:10px}
+.bar svg{width:26px;height:26px}
+.bar b{font-size:16px;letter-spacing:-.01em}
+.bar a{color:#0f172a;text-decoration:none;display:flex;align-items:center;gap:10px}
+main{max-width:42rem;margin:0 auto;padding:24px 16px 40px}
+dl{margin:0}
+dt{font-weight:600;margin-top:14px}
+dt:first-child{margin-top:0}
+dd{margin:4px 0 0}
+.crumb{font-size:13px;color:#64748b;margin-bottom:14px}
+.crumb a{color:#64748b}
+h1{font-size:28px;line-height:1.2;letter-spacing:-.02em;margin:0 0 10px}
+h2{font-size:17px;margin:0 0 10px}
+p{margin:0 0 12px;color:#475569;font-size:15px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;margin:16px 0;
+ box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.hero{background:#0f172a;color:#fff;border-radius:14px;padding:22px;text-align:center;margin:18px 0}
+.hero .k{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#94a3b8}
+.hero .v{font-size:42px;font-weight:650;margin:4px 0 0;font-variant-numeric:tabular-nums}
+.hero .m{font-size:14px;color:#94a3b8;margin-top:6px}
+.pill{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:999px;
+ font-size:12px;font-weight:650}
+.grid{display:grid;gap:16px}
+@media(min-width:640px){.grid.two{grid-template-columns:1fr 1fr}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#64748b;
+ text-align:left;padding:0 4px 8px;font-weight:650}
+th.r,td.r{text-align:right}
+td{padding:7px 4px;border-top:1px solid #f1f5f9;color:#334155;font-variant-numeric:tabular-nums}
+tr.fin td{color:#1d4ed8;font-weight:650}
+.cta{display:inline-block;background:#2563eb;color:#fff;text-decoration:none;font-weight:600;
+ font-size:15px;padding:11px 20px;border-radius:10px}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.links a{font-size:14px;text-decoration:none;border:1px solid #e2e8f0;background:#fff;
+ border-radius:999px;padding:6px 14px;color:#334155}
+.lede{font-size:17px;color:#334155;margin-bottom:18px}
+ul{margin:0 0 12px;padding-left:20px;color:#475569;font-size:15px}
+li{margin-bottom:7px}
+footer{border-top:1px solid #e2e8f0;background:#fff;margin-top:32px}
+footer .in{max-width:42rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
+</style>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<div class="bar"><div class="in">
+<a class="brand" href="../"><svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#2563eb"/><rect x="234" y="116" width="44" height="52" rx="12" fill="#fff"/><circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40"/><path d="M256 302 L330 228" fill="none" stroke="#fff" stroke-width="36" stroke-linecap="round"/></svg><b>Race Pace Pro</b></a>
+<nav class="nav" aria-label="Site"><a href="../">Calculator</a><a href="../pace/" aria-current="page">Pace charts</a><a href="../predictor/">Predictor</a><a href="../marathons/">Marathons</a><a href="../guides/">Guides</a></nav>
+</div></div>
+<main>
+<nav class="crumb"><a href="../">Home</a> › Pace charts</nav>
+
+<h1>Race pace charts</h1>
+<p class="lede">The pace every common goal time demands, for each standard race distance, with
+full split tables. Pick a distance, then pick the time you are chasing.</p>
+
+<div class="card">
+  <h2><a href="../pace/5k/">5K pace chart</a></h2>
+  <p>5 km, or 3.11 miles. Every common goal time with
+  the pace it needs in minutes per kilometre and per mile.</p>
+  <div class="links">
+    <a href="../pace/sub-15-5k/">Sub-15 5K pace</a><a href="../pace/sub-18-5k/">Sub-18 5K pace</a><a href="../pace/sub-20-5k/">Sub-20 5K pace</a><a href="../pace/sub-22-5k/">Sub-22 5K pace</a><a href="../pace/sub-25-5k/">Sub-25 5K pace</a><a href="../pace/sub-30-5k/">Sub-30 5K pace</a><a href="../pace/sub-35-5k/">Sub-35 5K pace</a>
+  </div>
+</div><div class="card">
+  <h2><a href="../pace/10k/">10K pace chart</a></h2>
+  <p>10 km, or 6.21 miles. Every common goal time with
+  the pace it needs in minutes per kilometre and per mile.</p>
+  <div class="links">
+    <a href="../pace/sub-35-10k/">Sub-35 10K pace</a><a href="../pace/sub-40-10k/">Sub-40 10K pace</a><a href="../pace/sub-45-10k/">Sub-45 10K pace</a><a href="../pace/sub-50-10k/">Sub-50 10K pace</a><a href="../pace/sub-55-10k/">Sub-55 10K pace</a><a href="../pace/sub-1-00-10k/">Sub-1:00 10K pace</a><a href="../pace/sub-1-10-10k/">Sub-1:10 10K pace</a>
+  </div>
+</div><div class="card">
+  <h2><a href="../pace/half-marathon/">Half Marathon pace chart</a></h2>
+  <p>21.0975 km, or 13.11 miles. Every common goal time with
+  the pace it needs in minutes per kilometre and per mile.</p>
+  <div class="links">
+    <a href="../pace/sub-1-20-half-marathon/">Sub-1:20 Half Marathon pace</a><a href="../pace/sub-1-30-half-marathon/">Sub-1:30 Half Marathon pace</a><a href="../pace/sub-1-40-half-marathon/">Sub-1:40 Half Marathon pace</a><a href="../pace/sub-1-45-half-marathon/">Sub-1:45 Half Marathon pace</a><a href="../pace/sub-1-50-half-marathon/">Sub-1:50 Half Marathon pace</a><a href="../pace/sub-2-00-half-marathon/">Sub-2:00 Half Marathon pace</a><a href="../pace/sub-2-15-half-marathon/">Sub-2:15 Half Marathon pace</a><a href="../pace/sub-2-30-half-marathon/">Sub-2:30 Half Marathon pace</a>
+  </div>
+</div><div class="card">
+  <h2><a href="../pace/marathon/">Marathon pace chart</a></h2>
+  <p>42.195 km, or 26.22 miles. Every common goal time with
+  the pace it needs in minutes per kilometre and per mile.</p>
+  <div class="links">
+    <a href="../pace/sub-2-45-marathon/">Sub-2:45 Marathon pace</a><a href="../pace/sub-3-00-marathon/">Sub-3:00 Marathon pace</a><a href="../pace/sub-3-15-marathon/">Sub-3:15 Marathon pace</a><a href="../pace/sub-3-30-marathon/">Sub-3:30 Marathon pace</a><a href="../pace/sub-3-45-marathon/">Sub-3:45 Marathon pace</a><a href="../pace/sub-4-00-marathon/">Sub-4:00 Marathon pace</a><a href="../pace/sub-4-30-marathon/">Sub-4:30 Marathon pace</a><a href="../pace/sub-5-00-marathon/">Sub-5:00 Marathon pace</a>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Not sure which time to aim for?</h2>
+  <p>Predict a realistic target from a race you have already run, then come back and pick the
+  chart that matches it.</p>
+  <p><a class="cta" href="../predictor/">Open the race time predictor</a></p>
+</div>
+
+<div class="card">
+  <h2>Any other distance</h2>
+  <p>The calculator handles distances these charts do not cover, in kilometres or miles, with
+  splits and negative split pacing.</p>
+  <p><a class="cta" href="../">Open the calculator</a></p>
+</div>
+</main>
+<footer><div class="in">Race Pace Pro is a free running pace calculator. Calculations run entirely in your browser.</div></footer>
+</body>
+</html>
