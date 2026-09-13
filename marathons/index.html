@@ -16,6 +16,8 @@
 <meta property="og:title" content="Marathon Pacing Guides by Race">
 <meta property="og:description" content="Pacing guides for major marathons, covering what each course does to your splits and how to plan for it.">
 <meta property="og:image" content="https://racepacepro.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Marathon Pacing Guides by Race">
 <meta name="twitter:description" content="Pacing guides for major marathons, covering what each course does to your splits and how to plan for it.">
@@ -113,8 +115,19 @@ tr.fin td{color:#1d4ed8;font-weight:650}
 .lede{font-size:17px;color:#334155;margin-bottom:18px}
 ul{margin:0 0 12px;padding-left:20px;color:#475569;font-size:15px}
 li{margin-bottom:7px}
+.hero-race{position:relative;border-radius:16px;overflow:hidden;margin:0 0 16px;isolation:isolate}
+.hero-art{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+.hero-body{padding:22px 20px}
+.hero-race h1{color:#fff;margin:2px 0 0;font-size:26px}
+.hero-where{color:rgba(255,255,255,.82);margin:0;font-size:12px;font-weight:650;
+ letter-spacing:.07em;text-transform:uppercase}
+.hero-profile{color:rgba(255,255,255,.9);margin:8px 0 0;font-size:14px;font-weight:500}
+@media(min-width:640px){.hero-body{padding:28px 26px}.hero-race h1{font-size:30px}}
+.swatch{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:8px;vertical-align:baseline}
 footer{border-top:1px solid #e2e8f0;background:#fff;margin-top:32px}
 footer .in{max-width:42rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
+footer .foot{margin:0;font-size:13px;color:#64748b}
+footer .foot + .foot{margin-top:8px;font-size:12px;color:#94a3b8}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -136,91 +149,91 @@ left to the official sites, which are linked from every page.</p>
     <thead><tr><th>Race</th><th>Month</th><th>Course</th></tr></thead>
     <tbody>
       <tr>
-        <td><a href="../marathons/berlin/">Berlin Marathon</a></td>
+        <td><span class="swatch" style="background:#3374a3"></span><a href="../marathons/berlin/">Berlin Marathon</a></td>
         <td>September</td>
         <td>Flat and fast</td>
       </tr><tr>
-        <td><a href="../marathons/london/">London Marathon</a></td>
+        <td><span class="swatch" style="background:#b2385d"></span><a href="../marathons/london/">London Marathon</a></td>
         <td>April</td>
         <td>Flat with a downhill start</td>
       </tr><tr>
-        <td><a href="../marathons/boston/">Boston Marathon</a></td>
+        <td><span class="swatch" style="background:#267877"></span><a href="../marathons/boston/">Boston Marathon</a></td>
         <td>April</td>
         <td>Net downhill, deceptively hard</td>
       </tr><tr>
-        <td><a href="../marathons/chicago/">Chicago Marathon</a></td>
+        <td><span class="swatch" style="background:#b23892"></span><a href="../marathons/chicago/">Chicago Marathon</a></td>
         <td>October</td>
         <td>Flat and fast</td>
       </tr><tr>
-        <td><a href="../marathons/new-york/">New York City Marathon</a></td>
+        <td><span class="swatch" style="background:#277c56"></span><a href="../marathons/new-york/">New York City Marathon</a></td>
         <td>November</td>
         <td>Rolling, with bridges</td>
       </tr><tr>
-        <td><a href="../marathons/tokyo/">Tokyo Marathon</a></td>
+        <td><span class="swatch" style="background:#9e38b2"></span><a href="../marathons/tokyo/">Tokyo Marathon</a></td>
         <td>March</td>
         <td>Flat with out and back sections</td>
       </tr><tr>
-        <td><a href="../marathons/valencia/">Valencia Marathon</a></td>
+        <td><span class="swatch" style="background:#277c31"></span><a href="../marathons/valencia/">Valencia Marathon</a></td>
         <td>December</td>
         <td>Flat and very fast</td>
       </tr><tr>
-        <td><a href="../marathons/prague/">Prague Marathon</a></td>
+        <td><span class="swatch" style="background:#6938b2"></span><a href="../marathons/prague/">Prague Marathon</a></td>
         <td>May</td>
         <td>Flat, with cobbled sections</td>
       </tr><tr>
-        <td><a href="../marathons/paris/">Paris Marathon</a></td>
+        <td><span class="swatch" style="background:#886a2b"></span><a href="../marathons/paris/">Paris Marathon</a></td>
         <td>April</td>
         <td>Flat, with cobbles and tunnels</td>
       </tr><tr>
-        <td><a href="../marathons/amsterdam/">Amsterdam Marathon</a></td>
+        <td><span class="swatch" style="background:#383cb2"></span><a href="../marathons/amsterdam/">Amsterdam Marathon</a></td>
         <td>October</td>
         <td>Flat and fast</td>
       </tr><tr>
-        <td><a href="../marathons/rotterdam/">Rotterdam Marathon</a></td>
+        <td><span class="swatch" style="background:#ae5537"></span><a href="../marathons/rotterdam/">Rotterdam Marathon</a></td>
         <td>April</td>
         <td>Flat, with two bridge crossings</td>
       </tr><tr>
-        <td><a href="../marathons/frankfurt/">Frankfurt Marathon</a></td>
+        <td><span class="swatch" style="background:#3871b2"></span><a href="../marathons/frankfurt/">Frankfurt Marathon</a></td>
         <td>October</td>
         <td>Flat and fast</td>
       </tr><tr>
-        <td><a href="../marathons/seville/">Seville Marathon</a></td>
+        <td><span class="swatch" style="background:#b2384f"></span><a href="../marathons/seville/">Seville Marathon</a></td>
         <td>February</td>
         <td>Among the flattest major courses</td>
       </tr><tr>
-        <td><a href="../marathons/vienna/">Vienna City Marathon</a></td>
+        <td><span class="swatch" style="background:#287780"></span><a href="../marathons/vienna/">Vienna City Marathon</a></td>
         <td>April</td>
         <td>Flat, shared with the half marathon</td>
       </tr><tr>
-        <td><a href="../marathons/athens/">Athens Marathon</a></td>
+        <td><span class="swatch" style="background:#b23884"></span><a href="../marathons/athens/">Athens Marathon</a></td>
         <td>November</td>
         <td>Uphill for two thirds</td>
       </tr><tr>
-        <td><a href="../marathons/rome/">Rome Marathon</a></td>
+        <td><span class="swatch" style="background:#277c60"></span><a href="../marathons/rome/">Rome Marathon</a></td>
         <td>March</td>
         <td>Flat, with extensive cobbles</td>
       </tr><tr>
-        <td><a href="../marathons/dublin/">Dublin Marathon</a></td>
+        <td><span class="swatch" style="background:#ac38b2"></span><a href="../marathons/dublin/">Dublin Marathon</a></td>
         <td>October</td>
         <td>Rolling, with the hills late</td>
       </tr><tr>
-        <td><a href="../marathons/edinburgh/">Edinburgh Marathon</a></td>
+        <td><span class="swatch" style="background:#277c3b"></span><a href="../marathons/edinburgh/">Edinburgh Marathon</a></td>
         <td>May</td>
         <td>Net downhill, coastal and exposed</td>
       </tr><tr>
-        <td><a href="../marathons/marine-corps/">Marine Corps Marathon</a></td>
+        <td><span class="swatch" style="background:#7738b2"></span><a href="../marathons/marine-corps/">Marine Corps Marathon</a></td>
         <td>October</td>
         <td>Rolling, with a hard finish</td>
       </tr><tr>
-        <td><a href="../marathons/big-sur/">Big Sur Marathon</a></td>
+        <td><span class="swatch" style="background:#387c27"></span><a href="../marathons/big-sur/">Big Sur Marathon</a></td>
         <td>April</td>
         <td>Hilly, exposed and scenic</td>
       </tr><tr>
-        <td><a href="../marathons/honolulu/">Honolulu Marathon</a></td>
+        <td><span class="swatch" style="background:#4238b2"></span><a href="../marathons/honolulu/">Honolulu Marathon</a></td>
         <td>December</td>
         <td>Hot and humid, with Diamond Head twice</td>
       </tr><tr>
-        <td><a href="../marathons/gold-coast/">Gold Coast Marathon</a></td>
+        <td><span class="swatch" style="background:#a35c33"></span><a href="../marathons/gold-coast/">Gold Coast Marathon</a></td>
         <td>July</td>
         <td>Flat and fast</td>
       </tr>
@@ -234,6 +247,6 @@ left to the official sites, which are linked from every page.</p>
   <p><a class="cta" href="../">Open the calculator</a></p>
 </div>
 </main>
-<footer><div class="in">Race Pace Pro is a free running pace calculator. Calculations run entirely in your browser.</div></footer>
+<footer><div class="in"><p class="foot">Race Pace Pro is a free running pace calculator. Calculations run entirely in your browser.</p><p class="foot">Independent, and not affiliated with, endorsed by or sponsored by any race listed. Race names and trademarks are the property of their respective organisers.</p></div></footer>
 </body>
 </html>

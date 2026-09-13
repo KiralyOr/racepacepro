@@ -16,6 +16,8 @@
 <meta property="og:title" content="Sub-3:15 Marathon Pace and Splits">
 <meta property="og:description" content="To run a sub-3:15 marathon you need 4:37 per km (7:26 per mile). Full split table and pacing guidance.">
 <meta property="og:image" content="https://racepacepro.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sub-3:15 Marathon Pace and Splits">
 <meta name="twitter:description" content="To run a sub-3:15 marathon you need 4:37 per km (7:26 per mile). Full split table and pacing guidance.">
@@ -113,8 +115,19 @@ tr.fin td{color:#1d4ed8;font-weight:650}
 .lede{font-size:17px;color:#334155;margin-bottom:18px}
 ul{margin:0 0 12px;padding-left:20px;color:#475569;font-size:15px}
 li{margin-bottom:7px}
+.hero-race{position:relative;border-radius:16px;overflow:hidden;margin:0 0 16px;isolation:isolate}
+.hero-art{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+.hero-body{padding:22px 20px}
+.hero-race h1{color:#fff;margin:2px 0 0;font-size:26px}
+.hero-where{color:rgba(255,255,255,.82);margin:0;font-size:12px;font-weight:650;
+ letter-spacing:.07em;text-transform:uppercase}
+.hero-profile{color:rgba(255,255,255,.9);margin:8px 0 0;font-size:14px;font-weight:500}
+@media(min-width:640px){.hero-body{padding:28px 26px}.hero-race h1{font-size:30px}}
+.swatch{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:8px;vertical-align:baseline}
 footer{border-top:1px solid #e2e8f0;background:#fff;margin-top:32px}
 footer .in{max-width:42rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
+footer .foot{margin:0;font-size:13px;color:#64748b}
+footer .foot + .foot{margin-top:8px;font-size:12px;color:#94a3b8}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -171,6 +184,6 @@ or 7:26 per mile, for the full 42.195 km.</p>
   <p style="margin-top:14px"><a href="../../pace/marathon/">All Marathon paces →</a></p>
 </div>
 </main>
-<footer><div class="in">Race Pace Pro is a free running pace calculator. Calculations run entirely in your browser.</div></footer>
+<footer><div class="in"><p class="foot">Race Pace Pro is a free running pace calculator. Calculations run entirely in your browser.</p><p class="foot">Independent, and not affiliated with, endorsed by or sponsored by any race listed. Race names and trademarks are the property of their respective organisers.</p></div></footer>
 </body>
 </html>
