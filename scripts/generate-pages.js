@@ -49,6 +49,7 @@ const { ABOUT, FAQ } = loadModule(path.join(ROOT, 'src/homeContent.js'));
 const { analyticsHtml } = loadModule(path.join(ROOT, 'src/analytics.js'));
 const { PREDICTOR_PAGE, predictorTables } = loadModule(path.join(ROOT, 'src/predictorData.js'));
 const { NAV, sectionFor } = loadModule(path.join(ROOT, 'src/navigation.js'));
+const { hubContentFor } = loadModule(path.join(ROOT, 'src/hubContent.js'));
 
 // Relative rather than absolute so pages work wherever the site is served
 // from, including a subpath such as the GitHub Pages copy. The depth varies:
@@ -79,6 +80,10 @@ a{color:#1d4ed8}
 .bar b{font-size:16px;letter-spacing:-.01em}
 .bar a{color:#0f172a;text-decoration:none;display:flex;align-items:center;gap:10px}
 main{max-width:42rem;margin:0 auto;padding:24px 16px 40px}
+dl{margin:0}
+dt{font-weight:600;margin-top:14px}
+dt:first-child{margin-top:0}
+dd{margin:4px 0 0}
 .crumb{font-size:13px;color:#64748b;margin-bottom:14px}
 .crumb a{color:#64748b}
 h1{font-size:28px;line-height:1.2;letter-spacing:-.02em;margin:0 0 10px}
@@ -269,6 +274,27 @@ Pick a target for its full split table.</p>
     </tbody>
   </table>
 </div>
+
+${(() => {
+  const content = hubContentFor(page.race.id);
+  if (!content) return '';
+  return `<div class="card">
+  <h2>How to pace a ${esc(page.race.name.toLowerCase())}</h2>
+  ${content.pacing.map((para) => `<p>${esc(para)}</p>`).join('')}
+</div>
+
+<div class="card">
+  <h2>Common mistakes</h2>
+  <ul>${content.mistakes.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>
+</div>
+
+<div class="card">
+  <h2>${esc(page.race.name)} questions</h2>
+  <dl>${content.faq
+    .map((item) => `<dt>${esc(item.question)}</dt><dd>${esc(item.answer)}</dd>`)
+    .join('')}</dl>
+</div>`;
+})()}
 
 <div class="card">
   <h2>Work out your own target</h2>
@@ -668,7 +694,22 @@ const main = () => {
           )
         : hubBody(page, relFor(page.slug));
 
-    write(page.slug, layout({ ...page, crumbs, body }));
+    // Hubs answer distance specific questions on the page, so they carry the
+    // matching structured data. Built from the same array the page renders.
+    const hubContent = page.type === 'hub' ? hubContentFor(page.race.id) : null;
+    const extraSchema = hubContent
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: hubContent.faq.map((item) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: { '@type': 'Answer', text: item.answer },
+          })),
+        }
+      : undefined;
+
+    write(page.slug, layout({ ...page, crumbs, body, extraSchema }));
   });
 
   ARTICLES.forEach((article) => {
