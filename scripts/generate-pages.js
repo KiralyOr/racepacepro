@@ -50,6 +50,8 @@ const { analyticsHtml } = loadModule(path.join(ROOT, 'src/analytics.js'));
 const { PREDICTOR_PAGE, predictorTables } = loadModule(path.join(ROOT, 'src/predictorData.js'));
 const { NAV, sectionFor } = loadModule(path.join(ROOT, 'src/navigation.js'));
 const { hubContentFor } = loadModule(path.join(ROOT, 'src/hubContent.js'));
+const { themeForIndex } = loadModule(path.join(ROOT, 'src/raceTheme.js'));
+const { FOOTER_LINES } = loadModule(path.join(ROOT, 'src/siteFooter.js'));
 
 // Relative rather than absolute so pages work wherever the site is served
 // from, including a subpath such as the GitHub Pages copy. The depth varies:
@@ -152,8 +154,19 @@ tr.fin td{color:#1d4ed8;font-weight:650}
 .lede{font-size:17px;color:#334155;margin-bottom:18px}
 ul{margin:0 0 12px;padding-left:20px;color:#475569;font-size:15px}
 li{margin-bottom:7px}
+.hero-race{position:relative;border-radius:16px;overflow:hidden;margin:0 0 16px;isolation:isolate}
+.hero-art{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+.hero-body{padding:22px 20px}
+.hero-race h1{color:#fff;margin:2px 0 0;font-size:26px}
+.hero-where{color:rgba(255,255,255,.82);margin:0;font-size:12px;font-weight:650;
+ letter-spacing:.07em;text-transform:uppercase}
+.hero-profile{color:rgba(255,255,255,.9);margin:8px 0 0;font-size:14px;font-weight:500}
+@media(min-width:640px){.hero-body{padding:28px 26px}.hero-race h1{font-size:30px}}
+.swatch{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:8px;vertical-align:baseline}
 footer{border-top:1px solid #e2e8f0;background:#fff;margin-top:32px}
 footer .in{max-width:42rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
+footer .foot{margin:0;font-size:13px;color:#64748b}
+footer .foot + .foot{margin-top:8px;font-size:12px;color:#94a3b8}
 `;
 
 const MENU_ICON =
@@ -172,7 +185,10 @@ const ZONE_COLOUR = {
   recovery: ['#f1f5f9', '#475569'],
 };
 
-const layout = ({ slug, title, description, crumbs, body, extraSchema }) => {
+const layout = ({ slug, title, description, crumbs, body, extraSchema, ogImage }) => {
+  // Marathon pages pass their own share image so a link to Boston does not look
+  // identical to a link to Berlin. Everything else falls back to the site card.
+  const share = ogImage || `${SITE_ORIGIN}/og-image.png`;
   const REL = relFor(slug);
   const url = `${SITE_ORIGIN}/${slug}/`;
   const breadcrumb = {
@@ -203,11 +219,13 @@ const layout = ({ slug, title, description, crumbs, body, extraSchema }) => {
 <meta property="og:url" content="${url}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
-<meta property="og:image" content="${SITE_ORIGIN}/og-image.png">
+<meta property="og:image" content="${share}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(description)}">
-<meta name="twitter:image" content="${SITE_ORIGIN}/og-image.png">
+<meta name="twitter:image" content="${share}">
 <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
 ${extraSchema ? `<script type="application/ld+json">${JSON.stringify(extraSchema)}</script>` : ''}
 <style>${STYLES}</style>
@@ -230,7 +248,7 @@ ${analyticsHtml()}
     .join(' › ')}</nav>
 ${body}
 </main>
-<footer><div class="in">Race Pace Pro is a free running pace calculator. Calculations run entirely in your browser.</div></footer>
+<footer><div class="in">${FOOTER_LINES.map((line) => `<p class="foot">${esc(line)}</p>`).join('')}</div></footer>
 </body>
 </html>
 `;
@@ -396,23 +414,63 @@ ${article.sections
 const MARATHON_KM = 42.195;
 const REFERENCE_GOALS = [10800, 12600, 14400, 16200];
 
-const marathonBody = (race, REL) => `
-<h1>Pacing the ${esc(race.name)}</h1>
+// Abstract decoration only. Arcs and dots, never a line a reader could take
+// for a course profile: this project has no verified elevation data and will
+// not imply that it does.
+const MOTIFS = [
+  // concentric arcs from the top right
+  `<g fill="none" stroke="#fff" stroke-width="1.5">
+     <circle cx="330" cy="-10" r="70"/><circle cx="330" cy="-10" r="110"/>
+     <circle cx="330" cy="-10" r="150"/><circle cx="330" cy="-10" r="190"/>
+   </g>`,
+  // dot grid fading right
+  `<g fill="#fff">
+     ${Array.from({ length: 7 }, (_, r) =>
+       Array.from({ length: 12 }, (_, c) => `<circle cx="${230 + c * 15}" cy="${12 + r * 18}" r="2.2"/>`).join('')
+     ).join('')}
+   </g>`,
+  // long diagonals
+  `<g fill="none" stroke="#fff" stroke-width="1.5">
+     ${Array.from({ length: 9 }, (_, i) => `<path d="M${210 + i * 22} 140 L${290 + i * 22} -10"/>`).join('')}
+   </g>`,
+  // nested rounded squares
+  `<g fill="none" stroke="#fff" stroke-width="1.5">
+     <rect x="250" y="-30" width="120" height="120" rx="26"/>
+     <rect x="272" y="-8" width="120" height="120" rx="26"/>
+     <rect x="294" y="14" width="120" height="120" rx="26"/>
+   </g>`,
+];
+
+// The gradient id is namespaced by race. Only one hero renders per page today,
+// so a bare id would work, but two on one page would silently share the first
+// gradient and render identically. That is a confusing failure to debug later.
+const raceHero = (race, theme) => `
+<div class="hero-race">
+  <svg class="hero-art" viewBox="0 0 420 132" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
+    <defs><linearGradient id="hero-${race.id}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${theme.base}"/><stop offset="1" stop-color="${theme.deep}"/>
+    </linearGradient></defs>
+    <rect width="420" height="132" fill="url(#hero-${race.id})"/>
+    <g opacity="0.16">${MOTIFS[theme.motif]}</g>
+  </svg>
+  <div class="hero-body">
+    <p class="hero-where">${esc(race.city)}, ${esc(race.country)} &middot; ${esc(race.month)}</p>
+    <h1>Pacing the ${esc(race.name)}</h1>
+    <p class="hero-profile">${esc(race.profile)}</p>
+  </div>
+</div>
+`;
+
+const marathonBody = (race, theme, REL) => `
+${raceHero(race, theme)}
 <p class="lede">${esc(race.summary)}</p>
 
 <div class="card">
-  <table>
-    <tbody>
-      <tr><td><strong>Where</strong></td><td class="r">${esc(race.city)}, ${esc(race.country)}</td></tr>
-      <tr><td><strong>Usually held</strong></td><td class="r">${esc(race.month)}</td></tr>
-      <tr><td><strong>Course</strong></td><td class="r">${esc(race.profile)}</td></tr>
-      <tr><td><strong>Official site</strong></td><td class="r"><a href="${esc(
-        race.officialUrl
-      )}" rel="noopener nofollow" target="_blank">Dates and entry</a></td></tr>
-    </tbody>
-  </table>
-  <p style="margin-top:12px;font-size:13px;color:#64748b">Dates, ballots and entry rules change
-  every year and are not listed here. Check the official site.</p>
+  <p style="margin:0"><a class="cta" href="${esc(
+    race.officialUrl
+  )}" rel="noopener nofollow" target="_blank">Official site: dates and entry</a></p>
+  <p style="margin-top:12px;margin-bottom:0;font-size:13px;color:#64748b">Dates, ballots and entry
+  rules change every year and are not listed here. Check the official site.</p>
 </div>
 
 <div class="card">
@@ -573,8 +631,8 @@ left to the official sites, which are linked from every page.</p>
     <thead><tr><th>Race</th><th>Month</th><th>Course</th></tr></thead>
     <tbody>
       ${MARATHONS.map(
-        (race) => `<tr>
-        <td><a href="${REL}marathons/${race.id}/">${esc(race.name)}</a></td>
+        (race, i) => `<tr>
+        <td><span class="swatch" style="background:${themeForIndex(i).base}"></span><a href="${REL}marathons/${race.id}/">${esc(race.name)}</a></td>
         <td>${esc(race.month)}</td>
         <td>${esc(race.profile)}</td>
       </tr>`
@@ -828,7 +886,7 @@ const main = () => {
     })
   );
 
-  MARATHONS.forEach((race) => {
+  MARATHONS.forEach((race, index) => {
     write(
       `marathons/${race.id}`,
       layout({
@@ -842,7 +900,8 @@ const main = () => {
           { name: 'Marathons', href: '/marathons/' },
           { name: race.name, href: `/marathons/${race.id}/` },
         ],
-        body: marathonBody(race, relFor(`marathons/${race.id}`)),
+        body: marathonBody(race, themeForIndex(index), relFor(`marathons/${race.id}`)),
+        ogImage: `${SITE_ORIGIN}/og/marathons/${race.id}.jpg`,
       })
     );
   });
