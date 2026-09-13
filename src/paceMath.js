@@ -121,3 +121,52 @@ export const formatPace = (paceSeconds) => {
   const { minutes, seconds } = splitPace(paceSeconds);
   return `${minutes}:${String(seconds).padStart(2, '0')}`;
 };
+
+// Race time prediction, using Riegel's formula:
+//
+//   predicted = known x (target distance / known distance) ^ exponent
+//
+// The exponent is the whole idea. At 1.0 you would hold the same pace forever,
+// which nobody does. Above 1.0 it models slowing down as the distance grows.
+export const RIEGEL_STANDARD = 1.06;
+
+// Riegel assumes you are equally trained for both distances, which is rarely
+// true of the marathon. The higher exponent is the more conservative reading
+// coaches use for anyone who has not done marathon specific long runs, and it
+// matches what guides/marathon-goal-time says in prose.
+export const RIEGEL_CONSERVATIVE = 1.08;
+
+export const RIEGEL_EXPONENTS = [
+  {
+    id: 'standard',
+    value: RIEGEL_STANDARD,
+    label: 'Standard',
+    note: 'Assumes you are equally trained for both distances.',
+  },
+  {
+    id: 'conservative',
+    value: RIEGEL_CONSERVATIVE,
+    label: 'Conservative',
+    note: 'More realistic if you have not built marathon specific endurance.',
+  },
+];
+
+export const predictTime = (knownSeconds, knownKm, targetKm, exponent = RIEGEL_STANDARD) => {
+  if (!(knownSeconds > 0) || !(knownKm > 0) || !(targetKm > 0)) return null;
+  return knownSeconds * Math.pow(targetKm / knownKm, exponent);
+};
+
+// Every standard distance predicted from one result. The distance the result
+// came from is included and marked, because seeing your actual time sitting in
+// the row it was derived from is what makes the rest of the table legible.
+export const predictAll = (knownSeconds, knownKm, exponent = RIEGEL_STANDARD) =>
+  Object.entries(POPULAR_DISTANCES_KM).map(([name, km]) => {
+    const seconds = predictTime(knownSeconds, knownKm, km, exponent);
+    return {
+      name,
+      km,
+      seconds,
+      pacePerKm: seconds === null ? null : seconds / km,
+      isSource: Math.abs(km - knownKm) < 0.001,
+    };
+  });

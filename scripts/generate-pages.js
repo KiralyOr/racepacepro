@@ -42,8 +42,14 @@ const loadModule = (request) => {
 const { formatClock, formatPace } = loadModule(path.join(ROOT, 'src/paceMath.js'));
 const { RACES, SITE_ORIGIN, allPages, hubPage } = loadModule(path.join(ROOT, 'src/pageData.js'));
 const { ARTICLES } = loadModule(path.join(ROOT, 'src/articles.js'));
-const { MARATHONS } = loadModule(path.join(ROOT, 'src/marathons.js'));
+const { MARATHONS, FEATURED_MARATHONS, relatedRaces } = loadModule(
+  path.join(ROOT, 'src/marathons.js')
+);
 const { ABOUT, FAQ } = loadModule(path.join(ROOT, 'src/homeContent.js'));
+const { analyticsHtml } = loadModule(path.join(ROOT, 'src/analytics.js'));
+const { PREDICTOR_PAGE, predictorTables } = loadModule(path.join(ROOT, 'src/predictorData.js'));
+const { NAV, sectionFor } = loadModule(path.join(ROOT, 'src/navigation.js'));
+const { hubContentFor } = loadModule(path.join(ROOT, 'src/hubContent.js'));
 
 // Relative rather than absolute so pages work wherever the site is served
 // from, including a subpath such as the GitHub Pages copy. The depth varies:
@@ -60,12 +66,24 @@ const STYLES = `
 body{margin:0;background:#f8fafc;color:#0f172a;line-height:1.55;
  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif}
 a{color:#1d4ed8}
+/* 42rem matches Tailwind's max-w-2xl, which the React shell uses. The two
+   were 44rem and 42rem, so the header and content shifted by 32px when a
+   reader moved between the home page and a generated one. */
 .bar{background:#fff;border-bottom:1px solid #e2e8f0}
-.bar .in{max-width:44rem;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:10px}
+.bar .in{max-width:42rem;margin:0 auto;padding:14px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.nav{display:flex;flex-wrap:wrap;gap:6px 16px;margin-left:auto}
+.nav a{font-size:14px;color:#475569;font-weight:500}
+.nav a:hover{color:#0f172a}
+.nav a[aria-current]{color:#1d4ed8}
+.bar .brand{gap:10px}
 .bar svg{width:26px;height:26px}
 .bar b{font-size:16px;letter-spacing:-.01em}
 .bar a{color:#0f172a;text-decoration:none;display:flex;align-items:center;gap:10px}
-main{max-width:44rem;margin:0 auto;padding:24px 16px 40px}
+main{max-width:42rem;margin:0 auto;padding:24px 16px 40px}
+dl{margin:0}
+dt{font-weight:600;margin-top:14px}
+dt:first-child{margin-top:0}
+dd{margin:4px 0 0}
 .crumb{font-size:13px;color:#64748b;margin-bottom:14px}
 .crumb a{color:#64748b}
 h1{font-size:28px;line-height:1.2;letter-spacing:-.02em;margin:0 0 10px}
@@ -96,7 +114,7 @@ tr.fin td{color:#1d4ed8;font-weight:650}
 ul{margin:0 0 12px;padding-left:20px;color:#475569;font-size:15px}
 li{margin-bottom:7px}
 footer{border-top:1px solid #e2e8f0;background:#fff;margin-top:32px}
-footer .in{max-width:44rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
+footer .in{max-width:42rem;margin:0 auto;padding:20px 16px;font-size:13px;color:#64748b}
 `;
 
 const LOGO = `<svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#2563eb"/><rect x="234" y="116" width="44" height="52" rx="12" fill="#fff"/><circle cx="256" cy="302" r="132" fill="none" stroke="#fff" stroke-width="40"/><path d="M256 302 L330 228" fill="none" stroke="#fff" stroke-width="36" stroke-linecap="round"/></svg>`;
@@ -148,9 +166,18 @@ const layout = ({ slug, title, description, crumbs, body, extraSchema }) => {
 <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
 ${extraSchema ? `<script type="application/ld+json">${JSON.stringify(extraSchema)}</script>` : ''}
 <style>${STYLES}</style>
+${analyticsHtml()}
 </head>
 <body>
-<div class="bar"><div class="in"><a href="${REL}">${LOGO}<b>Race Pace Pro</b></a></div></div>
+<div class="bar"><div class="in">
+<a class="brand" href="${REL}">${LOGO}<b>Race Pace Pro</b></a>
+<nav class="nav" aria-label="Site">${NAV.map(
+    (item) =>
+      `<a href="${REL}${item.href}"${
+        item.href === sectionFor(slug) ? ' aria-current="page"' : ''
+      }>${esc(item.label)}</a>`
+  ).join('')}</nav>
+</div></div>
 <main>
 <nav class="crumb">${crumbs
     .map((c, i) => (i === crumbs.length - 1 ? esc(c.name) : `<a href="${REL}${c.href.replace(/^\//, '')}">${esc(c.name)}</a>`))
@@ -248,6 +275,27 @@ Pick a target for its full split table.</p>
   </table>
 </div>
 
+${(() => {
+  const content = hubContentFor(page.race.id);
+  if (!content) return '';
+  return `<div class="card">
+  <h2>How to pace a ${esc(page.race.name.toLowerCase())}</h2>
+  ${content.pacing.map((para) => `<p>${esc(para)}</p>`).join('')}
+</div>
+
+<div class="card">
+  <h2>Common mistakes</h2>
+  <ul>${content.mistakes.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>
+</div>
+
+<div class="card">
+  <h2>${esc(page.race.name)} questions</h2>
+  <dl>${content.faq
+    .map((item) => `<dt>${esc(item.question)}</dt><dd>${esc(item.answer)}</dd>`)
+    .join('')}</dl>
+</div>`;
+})()}
+
 <div class="card">
   <h2>Work out your own target</h2>
   <p>Any distance, any pace, in kilometres or miles, with split times and negative-split pacing.</p>
@@ -268,6 +316,12 @@ Pick a target for its full split table.</p>
       .map((r) => `<a href="${REL}pace/${r.id}/">${esc(r.name)}</a>`)
       .join('')}
   </div>
+</div>
+
+<div class="card">
+  <h2>Not sure which goal is realistic?</h2>
+  <p>Predict your ${esc(page.race.name.toLowerCase())} time from a race you have already run.</p>
+  <p><a class="cta" href="${REL}predictor/">Open the race time predictor</a></p>
 </div>`;
 
 const articleBody = (article, REL) => `
@@ -346,10 +400,121 @@ const marathonBody = (race, REL) => `
 <div class="card">
   <h2>Other marathons</h2>
   <div class="links">
-    ${MARATHONS.filter((other) => other.id !== race.id)
+    ${relatedRaces(race)
       .map((other) => `<a href="${REL}marathons/${other.id}/">${esc(other.name)}</a>`)
       .join('')}
   </div>
+  <p><a href="${REL}marathons/">All ${MARATHONS.length} pacing guides</a></p>
+</div>`;
+
+const paceIndexBody = (REL) => `
+<h1>Race pace charts</h1>
+<p class="lede">The pace every common goal time demands, for each standard race distance, with
+full split tables. Pick a distance, then pick the time you are chasing.</p>
+
+${RACES.map((race) => {
+  const hub = hubPage(race);
+  return `<div class="card">
+  <h2><a href="${REL}pace/${race.id}/">${esc(race.name)} pace chart</a></h2>
+  <p>${esc(race.km)} km, or ${(race.km / 1.609344).toFixed(2)} miles. Every common goal time with
+  the pace it needs in minutes per kilometre and per mile.</p>
+  <div class="links">
+    ${hub.goals
+      .map((goal) => `<a href="${REL}${goal.slug}/">${esc(goal.heading)}</a>`)
+      .join('')}
+  </div>
+</div>`;
+}).join('')}
+
+<div class="card">
+  <h2>Not sure which time to aim for?</h2>
+  <p>Predict a realistic target from a race you have already run, then come back and pick the
+  chart that matches it.</p>
+  <p><a class="cta" href="${REL}predictor/">Open the race time predictor</a></p>
+</div>
+
+<div class="card">
+  <h2>Any other distance</h2>
+  <p>The calculator handles distances these charts do not cover, in kilometres or miles, with
+  splits and negative split pacing.</p>
+  <p><a class="cta" href="${REL}">Open the calculator</a></p>
+</div>`;
+
+const guidesIndexBody = (REL) => `
+<h1>Running guides</h1>
+<p class="lede">Longer pieces on the decisions the calculator cannot make for you: how much
+training a first marathon actually takes, and how to pick a goal time you can defend.</p>
+
+${ARTICLES.map(
+  (article) => `<div class="card">
+  <h2><a href="${REL}${article.slug}/">${esc(article.title)}</a></h2>
+  <p>${esc(article.description)}</p>
+  <p><a href="${REL}${article.slug}/">Read the guide</a></p>
+</div>`
+).join('')}
+
+<div class="card">
+  <h2>Pacing a specific race</h2>
+  <p>Course by course guides to what each major marathon does to your splits.</p>
+  <p><a class="cta" href="${REL}marathons/">All ${MARATHONS.length} marathon pacing guides</a></p>
+</div>`;
+
+const predictorBody = (REL) => `
+<h1>Race time predictor</h1>
+<p class="lede">What a result at one distance suggests you can run at another. Every figure below
+comes from the Riegel formula, the same calculation the interactive predictor uses.</p>
+
+<div class="card">
+  <h2>How the prediction works</h2>
+  <p>Riegel's formula scales a known result by the ratio of the two distances, raised to a power:</p>
+  <p><strong>predicted time = known time x (new distance / known distance) ^ 1.06</strong></p>
+  <p>The exponent is the whole idea. At 1.0 you would hold the same pace forever, which nobody
+  does. At 1.06 the formula models the slowing down that comes with distance. Some coaches use
+  1.07 or 1.08 for the marathon specifically, which is more conservative and often more accurate
+  for anyone who has not built marathon specific endurance.</p>
+  <p>The tables below use 1.06. Treat them as an upper bound on what your current fitness allows,
+  not a target to train toward.</p>
+</div>
+
+${predictorTables()
+  .map(
+    (table) => `<div class="card">
+  <h2>If you have run a ${esc(table.source)}</h2>
+  <table>
+    <thead><tr><th>${esc(table.source)} time</th>${table.targets
+      .map((t) => `<th class="r">${esc(t)}</th>`)
+      .join('')}</tr></thead>
+    <tbody>
+      ${table.rows
+        .map(
+          (row) => `<tr>
+        <td>${formatClock(row.seconds)}</td>
+        ${row.predictions.map((p) => `<td class="r">${formatClock(Math.round(p))}</td>`).join('')}
+      </tr>`
+        )
+        .join('')}
+    </tbody>
+  </table>
+</div>`
+  )
+  .join('')}
+
+<div class="card">
+  <h2>Where predictions go wrong</h2>
+  <p>Riegel assumes you are equally well trained for both distances. Almost nobody is. The formula
+  is at its most reliable between neighbouring distances, and at its least reliable predicting a
+  marathon from a 5K, where it quietly assumes an endurance base that a fast 5K says nothing
+  about.</p>
+  <p>It also assumes even effort on a flat course in good conditions. Heat, hills and a congested
+  start all cost time no formula accounts for.</p>
+  <p><a class="cta" href="${REL}guides/marathon-goal-time/">Read the full guide to setting a goal time</a></p>
+</div>
+
+<div class="card">
+  <h2>Turn a prediction into a pacing plan</h2>
+  <p>Once you have a target, the calculator gives you the pace it needs and the split times to run
+  it.</p>
+  <p><a class="cta" href="${REL}">Open the calculator</a></p>
 </div>`;
 
 const marathonIndexBody = (REL) => `
@@ -398,14 +563,14 @@ const homeStaticHtml = () => `
     <p class="${PARA}">What each course does to your splits. Berlin and Valencia let you hold one
     pace, Boston punishes you for it, and New York asks for uneven splits by design.</p>
     <div class="mt-3 flex flex-wrap gap-2">
-      ${MARATHONS.map(
+      ${FEATURED_MARATHONS.map(
         (race) =>
           `<a href="marathons/${race.id}/" class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">${esc(
             race.name
           )}</a>`
       ).join('')}
     </div>
-    <p class="mt-3 text-sm"><a href="marathons/" class="font-medium text-blue-700 hover:underline">All marathon pacing guides</a></p>
+    <p class="mt-3 text-sm"><a href="marathons/" class="font-medium text-blue-700 hover:underline">All ${MARATHONS.length} marathon pacing guides</a></p>
   </section>
 
   <section class="${CARD}">
@@ -420,6 +585,13 @@ const homeStaticHtml = () => `
       </li>`
       ).join('')}
     </ul>
+  </section>
+
+  <section class="${CARD}">
+    <h2 class="${H2}">Race time predictor</h2>
+    <p class="${PARA}">What a result at one distance suggests you can run at another, for every
+    common finishing time. Riegel formula tables for 5K, 10K, half marathon and marathon.</p>
+    <p class="mt-3 text-sm"><a href="predictor/" class="font-medium text-blue-700 hover:underline">Open the race time predictor</a></p>
   </section>
 
   <section class="${CARD}">
@@ -481,14 +653,20 @@ const injectHomeContent = () => {
   });
 
   html = html.replace(ROOT_DIV, ROOT_DIV + homeStaticHtml());
-  html = html.replace(HEAD_END, faqSchemaHtml() + HEAD_END);
+  html = html.replace(HEAD_END, faqSchemaHtml() + analyticsHtml() + HEAD_END);
   fs.writeFileSync(file, html);
 };
+
+// Counted here rather than recomputed at the end. The old total was hand
+// written arithmetic over the page sources, so it silently went stale every
+// time a page was added from somewhere new.
+let written = 0;
 
 const write = (slug, html) => {
   const dir = path.join(BUILD, slug);
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), html);
+  written += 1;
 };
 
 const main = () => {
@@ -516,7 +694,22 @@ const main = () => {
           )
         : hubBody(page, relFor(page.slug));
 
-    write(page.slug, layout({ ...page, crumbs, body }));
+    // Hubs answer distance specific questions on the page, so they carry the
+    // matching structured data. Built from the same array the page renders.
+    const hubContent = page.type === 'hub' ? hubContentFor(page.race.id) : null;
+    const extraSchema = hubContent
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: hubContent.faq.map((item) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: { '@type': 'Answer', text: item.answer },
+          })),
+        }
+      : undefined;
+
+    write(page.slug, layout({ ...page, crumbs, body, extraSchema }));
   });
 
   ARTICLES.forEach((article) => {
@@ -541,6 +734,41 @@ const main = () => {
       })
     );
   });
+
+  write(
+    'pace',
+    layout({
+      slug: 'pace',
+      title: 'Race Pace Charts for 5K, 10K, Half Marathon and Marathon',
+      description:
+        'Pace charts for every standard race distance: the pace each common goal time demands, in minutes per kilometre and per mile, with full split tables.',
+      crumbs: [{ name: 'Home', href: '/' }, { name: 'Pace charts', href: '/pace/' }],
+      body: paceIndexBody(relFor('pace')),
+    })
+  );
+
+  write(
+    'guides',
+    layout({
+      slug: 'guides',
+      title: 'Running Guides: First Marathon and Goal Time Setting',
+      description:
+        'Longer guides on marathon training and race planning: what a first marathon build involves, and how to set a goal time you can actually defend on the day.',
+      crumbs: [{ name: 'Home', href: '/' }, { name: 'Guides', href: '/guides/' }],
+      body: guidesIndexBody(relFor('guides')),
+    })
+  );
+
+  write(
+    PREDICTOR_PAGE.slug,
+    layout({
+      slug: PREDICTOR_PAGE.slug,
+      title: PREDICTOR_PAGE.title,
+      description: PREDICTOR_PAGE.description,
+      crumbs: [{ name: 'Home', href: '/' }, { name: 'Race time predictor', href: '/predictor/' }],
+      body: predictorBody(relFor(PREDICTOR_PAGE.slug)),
+    })
+  );
 
   write(
     'marathons',
@@ -579,6 +807,9 @@ const main = () => {
     '',
     ...pages.map((p) => `${p.slug}/`),
     ...ARTICLES.map((a) => `${a.slug}/`),
+    'pace/',
+    'guides/',
+    `${PREDICTOR_PAGE.slug}/`,
     'marathons/',
     ...MARATHONS.map((race) => `marathons/${race.id}/`),
   ];
@@ -598,7 +829,7 @@ ${urls
 `
   );
 
-  console.log(`generate-pages: wrote ${pages.length + ARTICLES.length + MARATHONS.length + 1} pages and a sitemap with ${urls.length} URLs`);
+  console.log(`generate-pages: wrote ${written} pages and a sitemap with ${urls.length} URLs`);
 };
 
 main();
