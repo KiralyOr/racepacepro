@@ -22,4 +22,9 @@ This is a Create React App (react-scripts 5) single-page app with Tailwind CSS, 
 
 ## Deployment
 
-`.github/workflows/deploy.yml` builds and deploys to GitHub Pages (`gh-pages` branch) automatically on every push to `main`, via `JamesIves/github-pages-deploy-action`. The `homepage` field in `package.json` is set for GitHub Pages routing — keep it in sync with the deployed URL.
+Two targets fire on a push to `main`:
+
+- `.github/workflows/deploy.yml` builds and pushes to the `gh-pages` branch via `JamesIves/github-pages-deploy-action`, served at `https://kiralyor.github.io/racepacepro` — a **subpath**.
+- Vercel is connected to the repo and promotes a production deploy, served at a domain **root**.
+
+`homepage` in `package.json` is `"."` so CRA emits relative asset paths, which resolve under both. Do not set it back to an absolute URL: that hardcodes a `/racepacepro/` prefix onto every script and stylesheet, which resolves on GitHub Pages but 404s on Vercel and renders a blank page. The app has no client-side routing, so relative paths carry no downside here.

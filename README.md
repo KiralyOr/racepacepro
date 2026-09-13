@@ -47,8 +47,9 @@ View the live application at: https://kiralyor.github.io/racepacepro/
 
 ### GitHub Pages Deployment
 
-The `homepage` field in `package.json` is already set to
-`https://kiralyor.github.io/racepacepro` — keep it in sync with wherever the site is served from.
+The `homepage` field in `package.json` is `"."`, so the build emits relative asset paths and works
+both at a subpath (GitHub Pages) and at a domain root (Vercel). Changing it to an absolute URL will
+break whichever target isn't served from that exact path.
 
 1. Deploy to GitHub Pages:
    ```
